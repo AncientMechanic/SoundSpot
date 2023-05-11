@@ -1,34 +1,58 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Compile Update="Clients.cs">
+    <Compile Update="CustomForms\AddClient.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="CustomControls\ClientOrders.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Contracts.cs">
+    <Compile Update="CustomControls\Clients.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="SaleContracts.cs">
+    <Compile Update="CustomControls\Contracts.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="CustomControls\ProductTypes.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="CustomControls\RSproducts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="CustomControls\SaleContracts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="CustomForms\EditClient.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Update="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Instruments.cs">
+    <Compile Update="CustomControls\Instruments.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="MainMenu.cs">
+    <Compile Update="CustomControls\MainMenu.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Manufacturers.cs">
+    <Compile Update="CustomControls\Manufacturers.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Sellers.cs">
+    <Compile Update="CustomControls\Sellers.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Suppliers.cs">
+    <Compile Update="CustomControls\ShipOrders.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="SupplyContracts.cs">
+    <Compile Update="CustomControls\Storage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="CustomControls\SuppliedProducts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="CustomControls\Suppliers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="CustomControls\SupplyContracts.cs">
       <SubType>UserControl</SubType>
     </Compile>
   </ItemGroup>
