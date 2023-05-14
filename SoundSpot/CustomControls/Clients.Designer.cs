@@ -41,7 +41,7 @@
             label3.AutoSize = true;
             label3.BackColor = Color.NavajoWhite;
             label3.Font = new Font("Verdana", 21.75F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point);
-            label3.Location = new Point(242, 0);
+            label3.Location = new Point(307, 0);
             label3.MinimumSize = new Size(200, 50);
             label3.Name = "label3";
             label3.Size = new Size(200, 50);
@@ -57,7 +57,7 @@
             button1.FlatStyle = FlatStyle.Popup;
             button1.Font = new Font("Verdana", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             button1.ForeColor = SystemColors.ControlText;
-            button1.Location = new Point(17, 11);
+            button1.Location = new Point(21, 16);
             button1.Name = "button1";
             button1.Size = new Size(85, 32);
             button1.TabIndex = 5;
@@ -68,13 +68,18 @@
             // ClientsGridView
             // 
             ClientsGridView.Anchor = AnchorStyles.None;
+            ClientsGridView.BackgroundColor = SystemColors.Window;
             ClientsGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            ClientsGridView.Location = new Point(16, 67);
+            ClientsGridView.Location = new Point(21, 67);
             ClientsGridView.Name = "ClientsGridView";
+            ClientsGridView.RowHeadersWidth = 70;
             ClientsGridView.RowTemplate.Height = 25;
-            ClientsGridView.Size = new Size(653, 383);
+            ClientsGridView.Size = new Size(772, 383);
             ClientsGridView.TabIndex = 6;
-            ClientsGridView.CellContentClick += dataGridView1_CellContentClick;
+            ClientsGridView.CellContentClick += ClientsGridView_CellContentClick;
+            ClientsGridView.CellValueChanged += ClientsGridView_CellValueChanged;
+            ClientsGridView.EditingControlShowing += ClientsGridView_EditingControlShowing;
+            ClientsGridView.UserAddedRow += ClientsGridView_UserAddedRow;
             // 
             // button2
             // 
@@ -83,11 +88,11 @@
             button2.FlatStyle = FlatStyle.Popup;
             button2.Font = new Font("Verdana", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             button2.ForeColor = SystemColors.ControlText;
-            button2.Location = new Point(584, 456);
+            button2.Location = new Point(708, 456);
             button2.Name = "button2";
             button2.Size = new Size(85, 32);
             button2.TabIndex = 7;
-            button2.Text = "+New";
+            button2.Text = "Refresh";
             button2.UseVisualStyleBackColor = false;
             button2.Click += button2_Click;
             // 
@@ -101,7 +106,7 @@
             Controls.Add(button1);
             Controls.Add(label3);
             Name = "Clients";
-            Size = new Size(685, 515);
+            Size = new Size(815, 515);
             Load += Clients_Load;
             ((System.ComponentModel.ISupportInitialize)ClientsGridView).EndInit();
             ResumeLayout(false);

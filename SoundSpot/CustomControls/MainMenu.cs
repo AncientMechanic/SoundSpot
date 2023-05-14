@@ -42,7 +42,7 @@ namespace SoundSpot
             Sellers sellers = parentForm.Controls["sellers1"] as Sellers;
             sellers.Visible = true;
         }
-        
+
         private void button8_Click(object sender, EventArgs e)
         {
             Form parentForm = this.Parent as Form;

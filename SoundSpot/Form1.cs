@@ -1,4 +1,3 @@
-using Npgsql;
 using System.Data;
 
 namespace SoundSpot
@@ -36,6 +35,11 @@ namespace SoundSpot
         }
 
         private void supplyContracts1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void shipOrders1_Load(object sender, EventArgs e)
         {
 
         }

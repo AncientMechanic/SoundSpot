@@ -72,8 +72,6 @@ C:\AncientMechanic\SoundSpot\SoundSpot\obj\Debug\net6.0-windows\SoundSpot.Storag
 C:\AncientMechanic\SoundSpot\SoundSpot\obj\Debug\net6.0-windows\SoundSpot.SuppliedProducts.resources
 C:\AncientMechanic\SoundSpot\SoundSpot\obj\Debug\net6.0-windows\SoundSpot.Suppliers.resources
 C:\AncientMechanic\SoundSpot\SoundSpot\obj\Debug\net6.0-windows\SoundSpot.SupplyContracts.resources
-C:\AncientMechanic\SoundSpot\SoundSpot\obj\Debug\net6.0-windows\SoundSpot.AddClient.resources
-C:\AncientMechanic\SoundSpot\SoundSpot\obj\Debug\net6.0-windows\SoundSpot.CustomForms.EditClient.resources
 C:\AncientMechanic\SoundSpot\SoundSpot\obj\Debug\net6.0-windows\SoundSpot.Form1.resources
 C:\AncientMechanic\SoundSpot\SoundSpot\obj\Debug\net6.0-windows\SoundSpot.csproj.GenerateResource.cache
 C:\AncientMechanic\SoundSpot\SoundSpot\obj\Debug\net6.0-windows\SoundSpot.GeneratedMSBuildEditorConfig.editorconfig

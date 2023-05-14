@@ -72,7 +72,7 @@
             clients1.BackColor = Color.NavajoWhite;
             clients1.Location = new Point(0, 0);
             clients1.Name = "clients1";
-            clients1.Size = new Size(685, 515);
+            clients1.Size = new Size(885, 515);
             clients1.TabIndex = 0;
             // 
             // sellers1
@@ -80,7 +80,7 @@
             sellers1.BackColor = Color.NavajoWhite;
             sellers1.Location = new Point(0, 0);
             sellers1.Name = "sellers1";
-            sellers1.Size = new Size(685, 515);
+            sellers1.Size = new Size(885, 515);
             sellers1.TabIndex = 1;
             // 
             // manufacturers1
@@ -88,7 +88,7 @@
             manufacturers1.BackColor = Color.NavajoWhite;
             manufacturers1.Location = new Point(0, 0);
             manufacturers1.Name = "manufacturers1";
-            manufacturers1.Size = new Size(685, 515);
+            manufacturers1.Size = new Size(885, 515);
             manufacturers1.TabIndex = 2;
             // 
             // suppliers1
@@ -96,7 +96,7 @@
             suppliers1.BackColor = Color.NavajoWhite;
             suppliers1.Location = new Point(0, 0);
             suppliers1.Name = "suppliers1";
-            suppliers1.Size = new Size(685, 515);
+            suppliers1.Size = new Size(885, 515);
             suppliers1.TabIndex = 3;
             // 
             // instruments1
@@ -104,7 +104,7 @@
             instruments1.BackColor = Color.NavajoWhite;
             instruments1.Location = new Point(0, 0);
             instruments1.Name = "instruments1";
-            instruments1.Size = new Size(685, 515);
+            instruments1.Size = new Size(885, 515);
             instruments1.TabIndex = 4;
             // 
             // contracts1
@@ -112,7 +112,7 @@
             contracts1.BackColor = Color.NavajoWhite;
             contracts1.Location = new Point(0, 0);
             contracts1.Name = "contracts1";
-            contracts1.Size = new Size(685, 515);
+            contracts1.Size = new Size(885, 515);
             contracts1.TabIndex = 5;
             // 
             // saleContracts1
@@ -120,7 +120,7 @@
             saleContracts1.BackColor = Color.NavajoWhite;
             saleContracts1.Location = new Point(0, 0);
             saleContracts1.Name = "saleContracts1";
-            saleContracts1.Size = new Size(685, 515);
+            saleContracts1.Size = new Size(885, 515);
             saleContracts1.TabIndex = 7;
             // 
             // supplyContracts1
@@ -128,7 +128,7 @@
             supplyContracts1.BackColor = Color.NavajoWhite;
             supplyContracts1.Location = new Point(0, 0);
             supplyContracts1.Name = "supplyContracts1";
-            supplyContracts1.Size = new Size(685, 515);
+            supplyContracts1.Size = new Size(885, 515);
             supplyContracts1.TabIndex = 8;
             supplyContracts1.Load += supplyContracts1_Load;
             // 
@@ -137,7 +137,7 @@
             mainMenu1.BackColor = Color.NavajoWhite;
             mainMenu1.Location = new Point(0, 0);
             mainMenu1.Name = "mainMenu1";
-            mainMenu1.Size = new Size(685, 515);
+            mainMenu1.Size = new Size(885, 515);
             mainMenu1.TabIndex = 9;
             // 
             // clientOrders1
@@ -145,7 +145,7 @@
             clientOrders1.BackColor = Color.NavajoWhite;
             clientOrders1.Location = new Point(0, 0);
             clientOrders1.Name = "clientOrders1";
-            clientOrders1.Size = new Size(685, 515);
+            clientOrders1.Size = new Size(885, 515);
             clientOrders1.TabIndex = 10;
             // 
             // productTypes1
@@ -153,7 +153,7 @@
             productTypes1.BackColor = Color.NavajoWhite;
             productTypes1.Location = new Point(0, 0);
             productTypes1.Name = "productTypes1";
-            productTypes1.Size = new Size(685, 515);
+            productTypes1.Size = new Size(885, 515);
             productTypes1.TabIndex = 11;
             // 
             // rSproducts1
@@ -161,7 +161,7 @@
             rSproducts1.BackColor = Color.NavajoWhite;
             rSproducts1.Location = new Point(0, 0);
             rSproducts1.Name = "rSproducts1";
-            rSproducts1.Size = new Size(685, 515);
+            rSproducts1.Size = new Size(885, 515);
             rSproducts1.TabIndex = 12;
             // 
             // storage1
@@ -169,7 +169,7 @@
             storage1.BackColor = Color.NavajoWhite;
             storage1.Location = new Point(0, 0);
             storage1.Name = "storage1";
-            storage1.Size = new Size(685, 515);
+            storage1.Size = new Size(885, 515);
             storage1.TabIndex = 13;
             // 
             // shipOrders1
@@ -177,22 +177,23 @@
             shipOrders1.BackColor = Color.NavajoWhite;
             shipOrders1.Location = new Point(0, 0);
             shipOrders1.Name = "shipOrders1";
-            shipOrders1.Size = new Size(685, 515);
+            shipOrders1.Size = new Size(885, 515);
             shipOrders1.TabIndex = 14;
+            shipOrders1.Load += shipOrders1_Load;
             // 
             // suppliedProducts1
             // 
             suppliedProducts1.BackColor = Color.NavajoWhite;
             suppliedProducts1.Location = new Point(0, 0);
             suppliedProducts1.Name = "suppliedProducts1";
-            suppliedProducts1.Size = new Size(685, 515);
+            suppliedProducts1.Size = new Size(885, 515);
             suppliedProducts1.TabIndex = 15;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(684, 514);
+            ClientSize = new Size(884, 514);
             Controls.Add(mainMenu1);
             Controls.Add(suppliedProducts1);
             Controls.Add(shipOrders1);

@@ -55,7 +55,7 @@
             tableLayoutPanel1.Controls.Add(button4, 0, 2);
             tableLayoutPanel1.Controls.Add(button3, 0, 1);
             tableLayoutPanel1.Controls.Add(button2, 0, 0);
-            tableLayoutPanel1.Location = new Point(25, 77);
+            tableLayoutPanel1.Location = new Point(90, 77);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 6;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 16.666666F));
@@ -158,7 +158,7 @@
             label5.BackColor = Color.Black;
             label5.BorderStyle = BorderStyle.FixedSingle;
             label5.ForeColor = SystemColors.ActiveCaptionText;
-            label5.Location = new Point(665, 83);
+            label5.Location = new Point(730, 83);
             label5.Name = "label5";
             label5.Size = new Size(2, 350);
             label5.TabIndex = 13;
@@ -169,7 +169,7 @@
             label4.BackColor = Color.Black;
             label4.BorderStyle = BorderStyle.FixedSingle;
             label4.ForeColor = SystemColors.ActiveCaptionText;
-            label4.Location = new Point(17, 83);
+            label4.Location = new Point(82, 83);
             label4.Name = "label4";
             label4.Size = new Size(2, 350);
             label4.TabIndex = 12;
@@ -181,7 +181,7 @@
             button1.FlatStyle = FlatStyle.Popup;
             button1.Font = new Font("Verdana", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             button1.ForeColor = SystemColors.ControlText;
-            button1.Location = new Point(17, 11);
+            button1.Location = new Point(21, 16);
             button1.Name = "button1";
             button1.Size = new Size(85, 32);
             button1.TabIndex = 11;
@@ -195,7 +195,7 @@
             label3.AutoSize = true;
             label3.BackColor = Color.NavajoWhite;
             label3.Font = new Font("Verdana", 21.75F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point);
-            label3.Location = new Point(242, 0);
+            label3.Location = new Point(307, 0);
             label3.MinimumSize = new Size(200, 50);
             label3.Name = "label3";
             label3.Size = new Size(200, 50);
@@ -210,7 +210,7 @@
             label2.BackColor = Color.Black;
             label2.BorderStyle = BorderStyle.FixedSingle;
             label2.ForeColor = SystemColors.ActiveCaptionText;
-            label2.Location = new Point(17, 447);
+            label2.Location = new Point(82, 447);
             label2.Name = "label2";
             label2.Size = new Size(650, 2);
             label2.TabIndex = 9;
@@ -222,7 +222,7 @@
             label1.BackColor = Color.Black;
             label1.BorderStyle = BorderStyle.FixedSingle;
             label1.ForeColor = SystemColors.ActiveCaptionText;
-            label1.Location = new Point(17, 72);
+            label1.Location = new Point(82, 72);
             label1.Name = "label1";
             label1.Size = new Size(650, 2);
             label1.TabIndex = 8;
@@ -241,7 +241,7 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Name = "Instruments";
-            Size = new Size(685, 515);
+            Size = new Size(815, 515);
             Load += Instruments_Load;
             tableLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);

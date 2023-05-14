@@ -45,7 +45,7 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.Controls.Add(button3, 0, 1);
             tableLayoutPanel1.Controls.Add(button2, 0, 0);
-            tableLayoutPanel1.Location = new Point(23, 150);
+            tableLayoutPanel1.Location = new Point(88, 150);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 2;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 42.3487549F));
@@ -88,7 +88,7 @@
             button1.FlatStyle = FlatStyle.Popup;
             button1.Font = new Font("Verdana", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             button1.ForeColor = SystemColors.ControlText;
-            button1.Location = new Point(17, 11);
+            button1.Location = new Point(21, 16);
             button1.Name = "button1";
             button1.Size = new Size(85, 32);
             button1.TabIndex = 18;
@@ -102,7 +102,7 @@
             label3.AutoSize = true;
             label3.BackColor = Color.NavajoWhite;
             label3.Font = new Font("Verdana", 21.75F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point);
-            label3.Location = new Point(242, 0);
+            label3.Location = new Point(307, 0);
             label3.MinimumSize = new Size(200, 50);
             label3.Name = "label3";
             label3.Size = new Size(200, 50);
@@ -116,7 +116,7 @@
             label2.BackColor = Color.Black;
             label2.BorderStyle = BorderStyle.FixedSingle;
             label2.ForeColor = SystemColors.ActiveCaptionText;
-            label2.Location = new Point(17, 434);
+            label2.Location = new Point(82, 434);
             label2.Name = "label2";
             label2.Size = new Size(650, 2);
             label2.TabIndex = 16;
@@ -127,7 +127,7 @@
             label1.BackColor = Color.Black;
             label1.BorderStyle = BorderStyle.FixedSingle;
             label1.ForeColor = SystemColors.ActiveCaptionText;
-            label1.Location = new Point(17, 103);
+            label1.Location = new Point(82, 103);
             label1.Name = "label1";
             label1.Size = new Size(650, 2);
             label1.TabIndex = 15;
@@ -143,7 +143,7 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Name = "Contracts";
-            Size = new Size(685, 515);
+            Size = new Size(815, 515);
             Load += Contracts_Load;
             tableLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);
