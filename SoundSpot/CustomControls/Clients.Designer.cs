@@ -32,6 +32,7 @@
             button1 = new Button();
             ClientsGridView = new DataGridView();
             button2 = new Button();
+            button3 = new Button();
             ((System.ComponentModel.ISupportInitialize)ClientsGridView).BeginInit();
             SuspendLayout();
             // 
@@ -70,11 +71,11 @@
             ClientsGridView.Anchor = AnchorStyles.None;
             ClientsGridView.BackgroundColor = SystemColors.Window;
             ClientsGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            ClientsGridView.Location = new Point(21, 67);
+            ClientsGridView.Location = new Point(21, 65);
             ClientsGridView.Name = "ClientsGridView";
             ClientsGridView.RowHeadersWidth = 70;
             ClientsGridView.RowTemplate.Height = 25;
-            ClientsGridView.Size = new Size(772, 383);
+            ClientsGridView.Size = new Size(772, 385);
             ClientsGridView.TabIndex = 6;
             ClientsGridView.CellContentClick += ClientsGridView_CellContentClick;
             ClientsGridView.CellValueChanged += ClientsGridView_CellValueChanged;
@@ -96,11 +97,27 @@
             button2.UseVisualStyleBackColor = false;
             button2.Click += button2_Click;
             // 
+            // button3
+            // 
+            button3.Anchor = AnchorStyles.None;
+            button3.BackColor = Color.Peru;
+            button3.FlatStyle = FlatStyle.Popup;
+            button3.Font = new Font("Verdana", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            button3.ForeColor = SystemColors.ControlText;
+            button3.Location = new Point(617, 456);
+            button3.Name = "button3";
+            button3.Size = new Size(85, 32);
+            button3.TabIndex = 8;
+            button3.Text = "Save As";
+            button3.UseVisualStyleBackColor = false;
+            button3.Click += button3_Click;
+            // 
             // Clients
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.NavajoWhite;
+            Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(ClientsGridView);
             Controls.Add(button1);
@@ -119,5 +136,6 @@
         private Button button1;
         private DataGridView ClientsGridView;
         private Button button2;
+        private Button button3;
     }
 }

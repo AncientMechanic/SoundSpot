@@ -139,6 +139,7 @@
             mainMenu1.Name = "mainMenu1";
             mainMenu1.Size = new Size(885, 515);
             mainMenu1.TabIndex = 9;
+            mainMenu1.Load += mainMenu1_Load;
             // 
             // clientOrders1
             // 

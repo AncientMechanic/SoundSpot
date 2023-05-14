@@ -32,6 +32,7 @@
             ClientsGridView = new DataGridView();
             button1 = new Button();
             label3 = new Label();
+            button3 = new Button();
             ((System.ComponentModel.ISupportInitialize)ClientsGridView).BeginInit();
             SuspendLayout();
             // 
@@ -89,17 +90,34 @@
             label3.Text = "Supply Contracts";
             label3.TextAlign = ContentAlignment.MiddleCenter;
             // 
+            // button3
+            // 
+            button3.Anchor = AnchorStyles.None;
+            button3.BackColor = Color.Peru;
+            button3.FlatStyle = FlatStyle.Popup;
+            button3.Font = new Font("Verdana", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            button3.ForeColor = SystemColors.ControlText;
+            button3.Location = new Point(617, 456);
+            button3.Name = "button3";
+            button3.Size = new Size(85, 32);
+            button3.TabIndex = 12;
+            button3.Text = "Save As";
+            button3.UseVisualStyleBackColor = false;
+            button3.Click += button3_Click;
+            // 
             // SupplyContracts
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.NavajoWhite;
+            Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(ClientsGridView);
             Controls.Add(button1);
             Controls.Add(label3);
             Name = "SupplyContracts";
             Size = new Size(815, 515);
+            Load += SupplyContracts_Load;
             ((System.ComponentModel.ISupportInitialize)ClientsGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -111,5 +129,6 @@
         private DataGridView ClientsGridView;
         private Button button1;
         private Label label3;
+        private Button button3;
     }
 }
