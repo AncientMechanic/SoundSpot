@@ -49,6 +49,7 @@
             button2.TabIndex = 15;
             button2.Text = "Refresh";
             button2.UseVisualStyleBackColor = false;
+            button2.Click += button2_Click;
             // 
             // ClientsGridView
             // 
@@ -60,6 +61,9 @@
             ClientsGridView.RowTemplate.Height = 25;
             ClientsGridView.Size = new Size(772, 383);
             ClientsGridView.TabIndex = 14;
+            ClientsGridView.CellContentClick += ClientsGridView_CellContentClick;
+            ClientsGridView.CellValueChanged += ClientsGridView_CellValueChanged;
+            ClientsGridView.UserAddedRow += ClientsGridView_UserAddedRow;
             // 
             // button1
             // 

@@ -61,6 +61,10 @@
             ClientsGridView.RowTemplate.Height = 25;
             ClientsGridView.Size = new Size(772, 383);
             ClientsGridView.TabIndex = 10;
+            ClientsGridView.CellContentClick += ClientsGridView_CellContentClick;
+            ClientsGridView.CellValueChanged += ClientsGridView_CellValueChanged;
+            ClientsGridView.EditingControlShowing += ClientsGridView_EditingControlShowing;
+            ClientsGridView.UserAddedRow += ClientsGridView_UserAddedRow;
             // 
             // button1
             // 
