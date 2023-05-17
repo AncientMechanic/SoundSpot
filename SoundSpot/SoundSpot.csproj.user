@@ -19,6 +19,12 @@
     <Compile Update="CustomControls\SaleContracts.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="CustomControls\SaleInvoices.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="CustomControls\SupplyInvoices.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

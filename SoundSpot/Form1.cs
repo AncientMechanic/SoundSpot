@@ -22,6 +22,8 @@ namespace SoundSpot
             shipOrders1.Visible = false;
             rSproducts1.Visible = false;
             productTypes1.Visible = false;
+            saleInvoices1.Visible = false;
+            supplyInvoices1.Visible = false;    
         }
 
         private void Form1_Load(object sender, EventArgs e)

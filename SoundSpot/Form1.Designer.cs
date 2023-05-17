@@ -45,6 +45,8 @@
             storage1 = new Storage();
             shipOrders1 = new ShipOrders();
             suppliedProducts1 = new SuppliedProducts();
+            saleInvoices1 = new CustomControls.SaleInvoices();
+            supplyInvoices1 = new CustomControls.SupplyInvoices();
             SuspendLayout();
             // 
             // tableLayoutPanel2
@@ -190,12 +192,30 @@
             suppliedProducts1.Size = new Size(885, 515);
             suppliedProducts1.TabIndex = 15;
             // 
+            // saleInvoices1
+            // 
+            saleInvoices1.BackColor = Color.NavajoWhite;
+            saleInvoices1.Location = new Point(0, 0);
+            saleInvoices1.Name = "saleInvoices1";
+            saleInvoices1.Size = new Size(885, 515);
+            saleInvoices1.TabIndex = 16;
+            // 
+            // supplyInvoices1
+            // 
+            supplyInvoices1.BackColor = Color.NavajoWhite;
+            supplyInvoices1.Location = new Point(0, 0);
+            supplyInvoices1.Name = "supplyInvoices1";
+            supplyInvoices1.Size = new Size(885, 515);
+            supplyInvoices1.TabIndex = 17;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(884, 514);
             Controls.Add(mainMenu1);
+            Controls.Add(supplyInvoices1);
+            Controls.Add(saleInvoices1);
             Controls.Add(suppliedProducts1);
             Controls.Add(shipOrders1);
             Controls.Add(storage1);
@@ -236,5 +256,7 @@
         private Storage storage1;
         private ShipOrders shipOrders1;
         private SuppliedProducts suppliedProducts1;
+        private CustomControls.SaleInvoices saleInvoices1;
+        private CustomControls.SupplyInvoices supplyInvoices1;
     }
 }
