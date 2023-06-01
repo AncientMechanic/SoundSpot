@@ -19,11 +19,68 @@
     <Compile Update="CustomControls\SaleContracts.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="CustomControls\SaleInvoices.cs">
+    <Compile Update="CustomControls\Storage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="CustomControls\SupplyInvoices.cs">
-      <SubType>UserControl</SubType>
+    <Compile Update="CustomForms\AddClient.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="CustomForms\AddClientOrder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="CustomForms\AddSeller.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="CustomForms\AddSuppliedProduct.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="CustomForms\AddManufacturer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="CustomForms\AddShipOrder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="CustomForms\AddStorage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="CustomForms\AddSupplier.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="CustomForms\AddSupplyContract.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="CustomForms\EditClient.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="CustomForms\EditClientOrder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="CustomForms\EditSeller.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="CustomForms\EditSuppliedProduct.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="CustomForms\EditManufacturer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="CustomForms\EditSaleContract.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="CustomForms\EditShipOrder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="CustomForms\EditStorage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="CustomForms\AddSaleContract.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="CustomForms\EditSupplier.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="CustomForms\EditSupplyContract.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Update="Form1.cs">
       <SubType>Form</SubType>
@@ -41,9 +98,6 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="CustomControls\ShipOrders.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="CustomControls\Storage.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="CustomControls\SuppliedProducts.cs">

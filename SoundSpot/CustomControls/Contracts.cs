@@ -1,4 +1,4 @@
-﻿using SoundSpot.CustomControls;
+﻿
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -45,22 +45,6 @@ namespace SoundSpot
             this.Visible = false;
             SupplyContracts supplycontracts = parentForm.Controls["supplyContracts1"] as SupplyContracts;
             supplycontracts.Visible = true;
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            Form parentForm = this.Parent as Form;
-            this.Visible = false;
-            SaleInvoices saleInvoices = parentForm.Controls["saleInvoices1"] as SaleInvoices;
-            saleInvoices.Visible = true;
-        }
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-            Form parentForm = this.Parent as Form;
-            this.Visible = false;
-            SupplyInvoices supplyInvoices = parentForm.Controls["supplyInvoices1"] as SupplyInvoices;
-            supplyInvoices.Visible = true;
         }
     }
 }

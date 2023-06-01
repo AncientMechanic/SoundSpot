@@ -47,7 +47,7 @@
             button2.Name = "button2";
             button2.Size = new Size(85, 32);
             button2.TabIndex = 11;
-            button2.Text = "Refresh";
+            button2.Text = "+ Add";
             button2.UseVisualStyleBackColor = false;
             button2.Click += button2_Click;
             // 
@@ -62,8 +62,6 @@
             ClientsGridView.Size = new Size(772, 383);
             ClientsGridView.TabIndex = 10;
             ClientsGridView.CellContentClick += ClientsGridView_CellContentClick;
-            ClientsGridView.CellValueChanged += ClientsGridView_CellValueChanged;
-            ClientsGridView.UserAddedRow += ClientsGridView_UserAddedRow;
             // 
             // button1
             // 
@@ -122,6 +120,7 @@
             Name = "Suppliers";
             Size = new Size(815, 515);
             Load += Suppliers_Load;
+            VisibleChanged += Suppliers_VisibleChanged;
             ((System.ComponentModel.ISupportInitialize)ClientsGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();

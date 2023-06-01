@@ -49,7 +49,6 @@
             label3.TabIndex = 4;
             label3.Text = "Clients";
             label3.TextAlign = ContentAlignment.MiddleCenter;
-            label3.Click += label3_Click;
             // 
             // button1
             // 
@@ -78,9 +77,6 @@
             ClientsGridView.Size = new Size(772, 385);
             ClientsGridView.TabIndex = 6;
             ClientsGridView.CellContentClick += ClientsGridView_CellContentClick;
-            ClientsGridView.CellValueChanged += ClientsGridView_CellValueChanged;
-            ClientsGridView.EditingControlShowing += ClientsGridView_EditingControlShowing;
-            ClientsGridView.UserAddedRow += ClientsGridView_UserAddedRow;
             // 
             // button2
             // 
@@ -93,7 +89,7 @@
             button2.Name = "button2";
             button2.Size = new Size(85, 32);
             button2.TabIndex = 7;
-            button2.Text = "Refresh";
+            button2.Text = "+ Add";
             button2.UseVisualStyleBackColor = false;
             button2.Click += button2_Click;
             // 
@@ -125,6 +121,7 @@
             Name = "Clients";
             Size = new Size(815, 515);
             Load += Clients_Load;
+            VisibleChanged += Clients_VisibleChanged;
             ((System.ComponentModel.ISupportInitialize)ClientsGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();

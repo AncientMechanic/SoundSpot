@@ -28,6 +28,7 @@ namespace SoundSpot
         public SupplyContracts()
         {
             InitializeComponent();
+            this.VisibleChanged += SupplyContracts_VisibleChanged;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -210,7 +211,7 @@ namespace SoundSpot
             }
         }
 
-        
+
 
         private void ClientsGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -251,7 +252,7 @@ namespace SoundSpot
                                 row["Date"] = ClientsGridView.Rows[rowIndex].Cells["Date"].Value;
                                 row["Description"] = ClientsGridView.Rows[rowIndex].Cells["Description"].Value;
                                 row["SupplierID"] = ClientsGridView.Rows[rowIndex].Cells["SupplierID"].Value;
-                                
+
 
                                 dataSet.Tables[table].Rows.Add(row);
                                 dataSet.Tables[table].Rows.RemoveAt(dataSet.Tables[table].Rows.Count - 2);
@@ -281,7 +282,7 @@ namespace SoundSpot
                                 row["Date"] = ClientsGridView.Rows[r].Cells["Date"].Value;
                                 row["Description"] = ClientsGridView.Rows[r].Cells["Description"].Value;
                                 row["SupplierID"] = ClientsGridView.Rows[r].Cells["SupplierID"].Value;
-                                
+
                                 row.EndEdit();
 
                                 dataAdapter.Update(dataSet, table);
@@ -313,6 +314,15 @@ namespace SoundSpot
         private void button2_Click(object sender, EventArgs e)
         {
             ReloadData();
+        }
+
+        private void SupplyContracts_VisibleChanged(object sender, EventArgs e)
+        {
+            if (this.Visible)
+            {
+                // The control is now visible, so refresh the DataGridView
+                //RefreshDataGridView();
+            }
         }
     }
 }

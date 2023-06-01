@@ -25,6 +25,7 @@ namespace SoundSpot
         public SaleContracts()
         {
             InitializeComponent();
+            this.VisibleChanged += SaleContracts_VisibleChanged;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -207,7 +208,7 @@ namespace SoundSpot
             }
         }
 
-        
+
 
         private void ClientsGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -310,6 +311,15 @@ namespace SoundSpot
         private void button2_Click(object sender, EventArgs e)
         {
             ReloadData();
+        }
+
+        private void SaleContracts_VisibleChanged(object sender, EventArgs e)
+        {
+            if (this.Visible)
+            {
+                // The control is now visible, so refresh the DataGridView
+                //RefreshDataGridView();
+            }
         }
     }
 }

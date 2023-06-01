@@ -28,28 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            button2 = new Button();
             ClientsGridView = new DataGridView();
             button1 = new Button();
             label3 = new Label();
             button3 = new Button();
             ((System.ComponentModel.ISupportInitialize)ClientsGridView).BeginInit();
             SuspendLayout();
-            // 
-            // button2
-            // 
-            button2.Anchor = AnchorStyles.None;
-            button2.BackColor = Color.Peru;
-            button2.FlatStyle = FlatStyle.Popup;
-            button2.Font = new Font("Verdana", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            button2.ForeColor = SystemColors.ControlText;
-            button2.Location = new Point(708, 456);
-            button2.Name = "button2";
-            button2.Size = new Size(85, 32);
-            button2.TabIndex = 15;
-            button2.Text = "Refresh";
-            button2.UseVisualStyleBackColor = false;
-            button2.Click += button2_Click;
             // 
             // ClientsGridView
             // 
@@ -61,9 +45,6 @@
             ClientsGridView.RowTemplate.Height = 25;
             ClientsGridView.Size = new Size(772, 383);
             ClientsGridView.TabIndex = 14;
-            ClientsGridView.CellContentClick += ClientsGridView_CellContentClick;
-            ClientsGridView.CellValueChanged += ClientsGridView_CellValueChanged;
-            ClientsGridView.UserAddedRow += ClientsGridView_UserAddedRow;
             // 
             // button1
             // 
@@ -101,7 +82,7 @@
             button3.FlatStyle = FlatStyle.Popup;
             button3.Font = new Font("Verdana", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             button3.ForeColor = SystemColors.ControlText;
-            button3.Location = new Point(617, 456);
+            button3.Location = new Point(708, 456);
             button3.Name = "button3";
             button3.Size = new Size(85, 32);
             button3.TabIndex = 16;
@@ -115,7 +96,6 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.NavajoWhite;
             Controls.Add(button3);
-            Controls.Add(button2);
             Controls.Add(ClientsGridView);
             Controls.Add(button1);
             Controls.Add(label3);
@@ -128,8 +108,6 @@
         }
 
         #endregion
-
-        private Button button2;
         private DataGridView ClientsGridView;
         private Button button1;
         private Label label3;

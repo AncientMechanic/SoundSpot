@@ -31,8 +31,6 @@
             tableLayoutPanel1 = new TableLayoutPanel();
             button3 = new Button();
             button2 = new Button();
-            button4 = new Button();
-            button5 = new Button();
             button1 = new Button();
             label3 = new Label();
             label2 = new Label();
@@ -47,13 +45,9 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.Controls.Add(button3, 0, 1);
             tableLayoutPanel1.Controls.Add(button2, 0, 0);
-            tableLayoutPanel1.Controls.Add(button4, 0, 2);
-            tableLayoutPanel1.Controls.Add(button5, 0, 3);
             tableLayoutPanel1.Location = new Point(88, 124);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 4;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
+            tableLayoutPanel1.RowCount = 2;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
             tableLayoutPanel1.Size = new Size(634, 307);
@@ -65,9 +59,9 @@
             button3.BackColor = Color.Peru;
             button3.FlatStyle = FlatStyle.Popup;
             button3.Font = new Font("Verdana", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
-            button3.Location = new Point(120, 79);
+            button3.Location = new Point(120, 156);
             button3.Name = "button3";
-            button3.Size = new Size(394, 70);
+            button3.Size = new Size(394, 117);
             button3.TabIndex = 1;
             button3.Text = "Supply Contracts";
             button3.UseVisualStyleBackColor = false;
@@ -81,39 +75,11 @@
             button2.Font = new Font("Verdana", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
             button2.Location = new Point(120, 3);
             button2.Name = "button2";
-            button2.Size = new Size(394, 70);
+            button2.Size = new Size(394, 118);
             button2.TabIndex = 0;
             button2.Text = "Sale Contracts";
             button2.UseVisualStyleBackColor = false;
             button2.Click += button2_Click;
-            // 
-            // button4
-            // 
-            button4.Anchor = AnchorStyles.Top;
-            button4.BackColor = Color.Peru;
-            button4.FlatStyle = FlatStyle.Popup;
-            button4.Font = new Font("Verdana", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
-            button4.Location = new Point(120, 155);
-            button4.Name = "button4";
-            button4.Size = new Size(394, 70);
-            button4.TabIndex = 2;
-            button4.Text = "Sale Invoices";
-            button4.UseVisualStyleBackColor = false;
-            button4.Click += button4_Click;
-            // 
-            // button5
-            // 
-            button5.Anchor = AnchorStyles.Top;
-            button5.BackColor = Color.Peru;
-            button5.FlatStyle = FlatStyle.Popup;
-            button5.Font = new Font("Verdana", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
-            button5.Location = new Point(120, 231);
-            button5.Name = "button5";
-            button5.Size = new Size(394, 70);
-            button5.TabIndex = 3;
-            button5.Text = "Supply Invoices";
-            button5.UseVisualStyleBackColor = false;
-            button5.Click += button5_Click;
             // 
             // button1
             // 
@@ -193,7 +159,5 @@
         private Label label3;
         private Label label2;
         private Label label1;
-        private Button button4;
-        private Button button5;
     }
 }
