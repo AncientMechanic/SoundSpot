@@ -13,12 +13,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Npgsql;
 using System.Configuration;
+using System.Diagnostics.Metrics;
 
 namespace SoundSpot.CustomForms
 {
     public partial class EditShipOrder : Form
     {
         private NpgsqlConnection? connection = null;
+        private decimal total;
         public EditShipOrder()
         {
             InitializeComponent();
@@ -37,7 +39,7 @@ namespace SoundSpot.CustomForms
 
         public decimal Sum
         {
-            get { return decimal.Parse(textBox2.Text); }
+            get { return total; }
             set { textBox2.Text = value.ToString(); }
         }
 
@@ -54,6 +56,22 @@ namespace SoundSpot.CustomForms
         }
         private void btnOK_Click(object sender, EventArgs e)
         {
+            decimal amount = decimal.Parse(textBox1.Text);
+            string connectionString = "Server=localhost;Port=5432;Database=SoundSpot;UserId=SoundSpot;Password=Polli1Anna2";
+            connection = new NpgsqlConnection(connectionString);
+            connection.Open();
+
+            string query = "SELECT InstrumentID FROM Instruments WHERE Name = @Name";
+            NpgsqlCommand command = new NpgsqlCommand(query, connection);
+            command.Parameters.AddWithValue("@Name", textBox4.Text);
+            int instrumentId = Convert.ToInt32(command.ExecuteScalar());
+
+            string priceQuery = "SELECT price FROM instruments WHERE InstrumentID = @InstrumentID";
+            NpgsqlCommand priceCommand = new NpgsqlCommand(priceQuery, connection);
+            priceCommand.Parameters.AddWithValue("@InstrumentID", instrumentId);
+            decimal price = Convert.ToDecimal(priceCommand.ExecuteScalar());
+            total = amount * price;
+
             DialogResult = DialogResult.OK;
             Close();
         }

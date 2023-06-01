@@ -112,7 +112,7 @@ namespace SoundSpot
                         NpgsqlCommand updateCommand = new NpgsqlCommand(updateQuery, connection);
                         updateCommand.Parameters.AddWithValue("@amount", updatedAmount);
                         updateCommand.Parameters.AddWithValue("@summary", updatedSum);
-                        updateCommand.Parameters.AddWithValue("@orderid", editrowId);
+                        updateCommand.Parameters.AddWithValue("@batchid", editrowId);
                         updateCommand.ExecuteNonQuery();
 
                         DataRow updatedRow = dataSet.Tables["batches"].Rows[0];
