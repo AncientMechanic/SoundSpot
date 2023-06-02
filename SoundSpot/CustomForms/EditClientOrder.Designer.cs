@@ -184,6 +184,7 @@
             Controls.Add(textBox1);
             Name = "EditClientOrder";
             Text = "EditClientOrders";
+            Load += EditClientOrder_Load;
             ResumeLayout(false);
             PerformLayout();
         }

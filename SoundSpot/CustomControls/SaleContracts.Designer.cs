@@ -62,8 +62,6 @@
             ClientsGridView.Size = new Size(772, 383);
             ClientsGridView.TabIndex = 10;
             ClientsGridView.CellContentClick += ClientsGridView_CellContentClick;
-            ClientsGridView.CellValueChanged += ClientsGridView_CellValueChanged;
-            ClientsGridView.UserAddedRow += ClientsGridView_UserAddedRow;
             // 
             // button1
             // 

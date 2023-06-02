@@ -43,6 +43,8 @@
             checkBox1 = new CheckBox();
             label7 = new Label();
             textBox4 = new TextBox();
+            textBox5 = new TextBox();
+            label8 = new Label();
             SuspendLayout();
             // 
             // btnOK
@@ -58,12 +60,13 @@
             btnOK.TabIndex = 23;
             btnOK.Text = "OK";
             btnOK.UseVisualStyleBackColor = false;
+            btnOK.Click += btnOK_Click;
             // 
             // label3
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Verdana", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
-            label3.Location = new Point(61, 170);
+            label3.Location = new Point(61, 205);
             label3.Name = "label3";
             label3.Size = new Size(94, 18);
             label3.TabIndex = 36;
@@ -90,7 +93,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Verdana", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
-            label2.Location = new Point(95, 124);
+            label2.Location = new Point(95, 163);
             label2.Name = "label2";
             label2.Size = new Size(60, 18);
             label2.TabIndex = 32;
@@ -115,7 +118,7 @@
             // 
             // textBox2
             // 
-            textBox2.Location = new Point(161, 124);
+            textBox2.Location = new Point(161, 163);
             textBox2.Name = "textBox2";
             textBox2.ReadOnly = true;
             textBox2.Size = new Size(180, 23);
@@ -123,7 +126,7 @@
             // 
             // textBox3
             // 
-            textBox3.Location = new Point(161, 170);
+            textBox3.Location = new Point(161, 205);
             textBox3.Name = "textBox3";
             textBox3.ReadOnly = true;
             textBox3.Size = new Size(180, 23);
@@ -132,7 +135,7 @@
             // checkBox2
             // 
             checkBox2.AutoSize = true;
-            checkBox2.Location = new Point(237, 309);
+            checkBox2.Location = new Point(237, 327);
             checkBox2.Name = "checkBox2";
             checkBox2.Size = new Size(15, 14);
             checkBox2.TabIndex = 45;
@@ -142,7 +145,7 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Verdana", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
-            label6.Location = new Point(51, 305);
+            label6.Location = new Point(51, 323);
             label6.Name = "label6";
             label6.Size = new Size(104, 18);
             label6.TabIndex = 44;
@@ -152,7 +155,7 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Verdana", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
-            label5.Location = new Point(74, 260);
+            label5.Location = new Point(74, 288);
             label5.Name = "label5";
             label5.Size = new Size(81, 18);
             label5.TabIndex = 43;
@@ -161,7 +164,7 @@
             // checkBox1
             // 
             checkBox1.AutoSize = true;
-            checkBox1.Location = new Point(237, 264);
+            checkBox1.Location = new Point(237, 292);
             checkBox1.Name = "checkBox1";
             checkBox1.Size = new Size(15, 14);
             checkBox1.TabIndex = 42;
@@ -171,7 +174,7 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Verdana", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
-            label7.Location = new Point(56, 215);
+            label7.Location = new Point(56, 250);
             label7.Name = "label7";
             label7.Size = new Size(99, 18);
             label7.TabIndex = 41;
@@ -179,11 +182,29 @@
             // 
             // textBox4
             // 
-            textBox4.Location = new Point(161, 215);
+            textBox4.Location = new Point(161, 250);
             textBox4.Name = "textBox4";
             textBox4.ReadOnly = true;
             textBox4.Size = new Size(180, 23);
             textBox4.TabIndex = 40;
+            // 
+            // textBox5
+            // 
+            textBox5.Location = new Point(161, 120);
+            textBox5.Name = "textBox5";
+            textBox5.ReadOnly = true;
+            textBox5.Size = new Size(180, 23);
+            textBox5.TabIndex = 47;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Font = new Font("Verdana", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+            label8.Location = new Point(95, 120);
+            label8.Name = "label8";
+            label8.Size = new Size(55, 18);
+            label8.TabIndex = 46;
+            label8.Text = "Total:";
             // 
             // EditSaleContract
             // 
@@ -191,6 +212,8 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.NavajoWhite;
             ClientSize = new Size(399, 411);
+            Controls.Add(textBox5);
+            Controls.Add(label8);
             Controls.Add(checkBox2);
             Controls.Add(label6);
             Controls.Add(label5);
@@ -208,6 +231,7 @@
             Controls.Add(btnOK);
             Name = "EditSaleContract";
             Text = "EditSaleContract";
+            Load += EditSaleContract_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -228,5 +252,7 @@
         private CheckBox checkBox1;
         private Label label7;
         private TextBox textBox4;
+        private TextBox textBox5;
+        private Label label8;
     }
 }

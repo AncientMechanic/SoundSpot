@@ -64,5 +64,10 @@ namespace SoundSpot.CustomForms
             DialogResult = DialogResult.OK;
             Close();
         }
+
+        private void EditClientOrder_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

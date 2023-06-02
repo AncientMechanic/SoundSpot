@@ -42,7 +42,7 @@
             btnAdd = new Button();
             comboBox1 = new ComboBox();
             comboBox2 = new ComboBox();
-            comboBox3 = new ComboBox();
+            textBox2 = new TextBox();
             SuspendLayout();
             // 
             // checkBox2
@@ -160,6 +160,7 @@
             btnAdd.TabIndex = 57;
             btnAdd.Text = "+ Add";
             btnAdd.UseVisualStyleBackColor = false;
+            btnAdd.Click += btnAdd_Click;
             // 
             // comboBox1
             // 
@@ -177,13 +178,12 @@
             comboBox2.Size = new Size(180, 23);
             comboBox2.TabIndex = 59;
             // 
-            // comboBox3
+            // textBox2
             // 
-            comboBox3.FormattingEnabled = true;
-            comboBox3.Location = new Point(161, 219);
-            comboBox3.Name = "comboBox3";
-            comboBox3.Size = new Size(180, 23);
-            comboBox3.TabIndex = 60;
+            textBox2.Location = new Point(161, 219);
+            textBox2.Name = "textBox2";
+            textBox2.Size = new Size(180, 23);
+            textBox2.TabIndex = 60;
             // 
             // AddSaleContract
             // 
@@ -191,7 +191,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.NavajoWhite;
             ClientSize = new Size(399, 411);
-            Controls.Add(comboBox3);
+            Controls.Add(textBox2);
             Controls.Add(comboBox2);
             Controls.Add(comboBox1);
             Controls.Add(btnAdd);
@@ -208,6 +208,7 @@
             Controls.Add(textBox1);
             Name = "AddSaleContract";
             Text = "SaleContracts";
+            Load += AddSaleContract_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -228,6 +229,6 @@
         private Button btnAdd;
         private ComboBox comboBox1;
         private ComboBox comboBox2;
-        private ComboBox comboBox3;
+        private TextBox textBox2;
     }
 }
