@@ -41,6 +41,8 @@
             label1 = new Label();
             textBox1 = new TextBox();
             textBox3 = new TextBox();
+            textBox5 = new TextBox();
+            label8 = new Label();
             SuspendLayout();
             // 
             // btnOK
@@ -56,11 +58,12 @@
             btnOK.TabIndex = 23;
             btnOK.Text = "OK";
             btnOK.UseVisualStyleBackColor = false;
+            btnOK.Click += btnOK_Click;
             // 
             // checkBox2
             // 
             checkBox2.AutoSize = true;
-            checkBox2.Location = new Point(235, 288);
+            checkBox2.Location = new Point(235, 285);
             checkBox2.Name = "checkBox2";
             checkBox2.Size = new Size(15, 14);
             checkBox2.TabIndex = 50;
@@ -70,7 +73,7 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Verdana", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
-            label6.Location = new Point(49, 284);
+            label6.Location = new Point(49, 281);
             label6.Name = "label6";
             label6.Size = new Size(104, 18);
             label6.TabIndex = 49;
@@ -80,7 +83,7 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Verdana", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
-            label5.Location = new Point(72, 239);
+            label5.Location = new Point(72, 246);
             label5.Name = "label5";
             label5.Size = new Size(81, 18);
             label5.TabIndex = 48;
@@ -89,7 +92,7 @@
             // checkBox1
             // 
             checkBox1.AutoSize = true;
-            checkBox1.Location = new Point(235, 243);
+            checkBox1.Location = new Point(235, 250);
             checkBox1.Name = "checkBox1";
             checkBox1.Size = new Size(15, 14);
             checkBox1.TabIndex = 47;
@@ -99,7 +102,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Verdana", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
-            label3.Location = new Point(54, 194);
+            label3.Location = new Point(54, 209);
             label3.Name = "label3";
             label3.Size = new Size(99, 18);
             label3.TabIndex = 46;
@@ -107,7 +110,7 @@
             // 
             // textBox2
             // 
-            textBox2.Location = new Point(159, 146);
+            textBox2.Location = new Point(159, 167);
             textBox2.Name = "textBox2";
             textBox2.ReadOnly = true;
             textBox2.Size = new Size(180, 23);
@@ -117,7 +120,7 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Verdana", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
-            label4.Location = new Point(100, 100);
+            label4.Location = new Point(100, 77);
             label4.Name = "label4";
             label4.Size = new Size(53, 18);
             label4.TabIndex = 44;
@@ -125,7 +128,7 @@
             // 
             // dateTimePicker1
             // 
-            dateTimePicker1.Location = new Point(159, 100);
+            dateTimePicker1.Location = new Point(159, 77);
             dateTimePicker1.Name = "dateTimePicker1";
             dateTimePicker1.Size = new Size(180, 23);
             dateTimePicker1.TabIndex = 43;
@@ -134,7 +137,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Verdana", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
-            label2.Location = new Point(73, 146);
+            label2.Location = new Point(73, 167);
             label2.Name = "label2";
             label2.Size = new Size(80, 18);
             label2.TabIndex = 42;
@@ -144,7 +147,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Verdana", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
-            label1.Location = new Point(41, 56);
+            label1.Location = new Point(41, 36);
             label1.Name = "label1";
             label1.Size = new Size(112, 18);
             label1.TabIndex = 41;
@@ -152,18 +155,36 @@
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(159, 56);
+            textBox1.Location = new Point(159, 36);
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(180, 23);
             textBox1.TabIndex = 40;
             // 
             // textBox3
             // 
-            textBox3.Location = new Point(159, 194);
+            textBox3.Location = new Point(159, 209);
             textBox3.Name = "textBox3";
             textBox3.ReadOnly = true;
             textBox3.Size = new Size(180, 23);
             textBox3.TabIndex = 51;
+            // 
+            // textBox5
+            // 
+            textBox5.Location = new Point(159, 122);
+            textBox5.Name = "textBox5";
+            textBox5.ReadOnly = true;
+            textBox5.Size = new Size(180, 23);
+            textBox5.TabIndex = 53;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Font = new Font("Verdana", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+            label8.Location = new Point(93, 122);
+            label8.Name = "label8";
+            label8.Size = new Size(55, 18);
+            label8.TabIndex = 52;
+            label8.Text = "Total:";
             // 
             // EditSupplyContract
             // 
@@ -171,6 +192,8 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.NavajoWhite;
             ClientSize = new Size(399, 411);
+            Controls.Add(textBox5);
+            Controls.Add(label8);
             Controls.Add(textBox3);
             Controls.Add(checkBox2);
             Controls.Add(label6);
@@ -204,5 +227,7 @@
         private Label label1;
         private TextBox textBox1;
         private TextBox textBox3;
+        private TextBox textBox5;
+        private Label label8;
     }
 }

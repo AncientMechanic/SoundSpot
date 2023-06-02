@@ -82,7 +82,6 @@ namespace SoundSpot
                 NpgsqlCommand command = new NpgsqlCommand(query, connection);
                 command.Parameters.AddWithValue("@" + tableid, editrowId);
 
-                ClientsGridView.Columns[tableid].Visible = false;
 
                 NpgsqlDataAdapter adapter = new NpgsqlDataAdapter(command);
                 DataSet dataSet = new DataSet();
@@ -164,7 +163,7 @@ namespace SoundSpot
 
 
             ClientsGridView.DataSource = dataSet.Tables[table];
-            ClientsGridView.Columns[tableid].Visible = false;
+            
         }
 
         private void ClientOrders_Load(object sender, EventArgs e)

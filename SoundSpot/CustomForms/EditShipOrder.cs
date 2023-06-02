@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using Npgsql;
 using System.Configuration;
 using System.Diagnostics.Metrics;
+using System.Net;
 
 namespace SoundSpot.CustomForms
 {
@@ -71,6 +72,19 @@ namespace SoundSpot.CustomForms
             priceCommand.Parameters.AddWithValue("@InstrumentID", instrumentId);
             decimal price = Convert.ToDecimal(priceCommand.ExecuteScalar());
             total = amount * price;
+
+            string selectQuery = "SELECT summary FROM batches WHERE instrumentid = @instrumentid";
+            NpgsqlCommand selectCommand = new NpgsqlCommand(selectQuery, connection);
+            selectCommand.Parameters.AddWithValue("@instrumentid", instrumentId);
+            decimal currentSum = (decimal)selectCommand.ExecuteScalar();
+
+            decimal newSum = total - currentSum;
+            string updateQuery = "UPDATE storage SET amount = amount + @newSum / @price WHERE  instrumentid = @instrumentid";
+            NpgsqlCommand updateCommand = new NpgsqlCommand(updateQuery, connection);
+            updateCommand.Parameters.AddWithValue("@newSum", newSum);
+            updateCommand.Parameters.AddWithValue("@price", price);
+            updateCommand.Parameters.AddWithValue("@instrumentid", instrumentId);
+            updateCommand.ExecuteNonQuery();
 
             DialogResult = DialogResult.OK;
             Close();

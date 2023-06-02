@@ -24,14 +24,6 @@ namespace SoundSpot.CustomForms
             InitializeComponent();
         }
         public event EventHandler DataSaved;
-        private int GetSaleContractIdByName(string SaleContractDesc)
-        {
-            string query = "SELECT contractsaleid FROM contractssale WHERE description = @description";
-            NpgsqlCommand command = new NpgsqlCommand(query, connection);
-            command.Parameters.AddWithValue("@description", SaleContractDesc);
-            int salecontractid = Convert.ToInt32(command.ExecuteScalar());
-            return salecontractid;
-        }
         private int GetClientIdByName(string ClientName)
         {
             string[] names = ClientName.Split(' ');

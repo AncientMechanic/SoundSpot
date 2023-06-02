@@ -56,6 +56,7 @@
             btnAdd.TabIndex = 22;
             btnAdd.Text = "+ Add";
             btnAdd.UseVisualStyleBackColor = false;
+            btnAdd.Click += btnAdd_Click;
             // 
             // label4
             // 
@@ -185,6 +186,7 @@
             Controls.Add(btnAdd);
             Name = "AddSupplyContract";
             Text = "AddSupplyContract";
+            Load += AddSupplyContract_Load;
             ResumeLayout(false);
             PerformLayout();
         }

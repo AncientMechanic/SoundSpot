@@ -13,16 +13,20 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Npgsql;
 using System.Configuration;
+using System.Diagnostics.Metrics;
+using System.Net;
 
 namespace SoundSpot.CustomForms
 {
     public partial class EditClientOrder : Form
     {
+        private bool add = false;
         private NpgsqlConnection? connection = null;
         public EditClientOrder()
         {
             InitializeComponent();
         }
+
         public int OrderName
         {
             get { return int.Parse(textBox5.Text); }
@@ -61,6 +65,59 @@ namespace SoundSpot.CustomForms
 
         private void btnOK_Click(object sender, EventArgs e)
         {
+            string connectionString = "Server=localhost;Port=5432;Database=SoundSpot;UserId=SoundSpot;Password=Polli1Anna2";
+            connection = new NpgsqlConnection(connectionString);
+            connection.Open();
+
+            string query = "SELECT instrumentid FROM instruments WHERE name = @name";
+            NpgsqlCommand command = new NpgsqlCommand(query, connection);
+            command.Parameters.AddWithValue("@name", textBox4.Text);
+            int instrumentId = Convert.ToInt32(command.ExecuteScalar());
+
+            //current amount 
+            string selectQuery = "SELECT amount FROM orders WHERE orderid = @orderid";
+            NpgsqlCommand selectCommand = new NpgsqlCommand(selectQuery, connection);
+            selectCommand.Parameters.AddWithValue("@orderid", OrderName);
+            decimal currentCount = (int)selectCommand.ExecuteScalar();
+
+            string countQuery = "SELECT amount FROM storage WHERE instrumentid = @instrumentid";
+            NpgsqlCommand countCommand = new NpgsqlCommand(@countQuery, connection);
+            countCommand.Parameters.AddWithValue("@instrumentid", instrumentId);
+            decimal countStorage = (int)countCommand.ExecuteScalar();
+
+            decimal newAmount = decimal.Parse(textBox1.Text);
+
+            if (add == false)
+            {
+                if (newAmount >= currentCount && newAmount - currentCount <= countStorage)
+                {
+                    string updateQuery = "UPDATE storage SET amount = amount - (@newAmount - @currentAmount) WHERE  instrumentid = @instrumentid";
+                    NpgsqlCommand updateCommand = new NpgsqlCommand(updateQuery, connection);
+                    updateCommand.Parameters.AddWithValue("@newAmount", newAmount);
+                    updateCommand.Parameters.AddWithValue("@currentAmount", currentCount);
+                    updateCommand.Parameters.AddWithValue("@instrumentid", instrumentId);
+                    updateCommand.ExecuteNonQuery();
+                    add = true;
+
+                }
+                else if (newAmount < currentCount)
+                {
+                    string updateQuery = "UPDATE storage SET amount = amount + (@currentAmount - @newAmount) WHERE  instrumentid = @instrumentid";
+                    NpgsqlCommand updateCommand = new NpgsqlCommand(updateQuery, connection);
+                    updateCommand.Parameters.AddWithValue("@newAmount", newAmount);
+                    updateCommand.Parameters.AddWithValue("@currentAmount", currentCount);
+                    updateCommand.Parameters.AddWithValue("@instrumentid", instrumentId);
+                    updateCommand.ExecuteNonQuery();
+                    add = true;
+
+                }
+                else if (newAmount > countStorage)
+                {
+                    MessageBox.Show("Недостаточное количество книг на складе!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+            }
             DialogResult = DialogResult.OK;
             Close();
         }

@@ -1,30 +1,31 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.VisualBasic;
+﻿using Microsoft.VisualBasic;
 using Npgsql;
+using NodaTime;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
-using System.Data.Common;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using NodaTime.Text;
+using NPOI.XWPF.UserModel;
+using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Drawing.Charts;
 
 namespace SoundSpot
 {
     public partial class SupplyContracts : UserControl
     {
         private NpgsqlConnection connection = null;
-        private NpgsqlCommandBuilder builder = null;
         private NpgsqlDataAdapter dataAdapter = null;
         private DataSet dataSet = null;
-        private bool newRowAdd = false;
-        private string table = "\"ContractsSupply\"";
-        private string tableID = "ContractSupplyID";
-        private int numcols = 4;
+        private string table = "contractssupply";
+        private string tableid = "contractsupplyid";
         public SupplyContracts()
         {
             InitializeComponent();
@@ -39,6 +40,141 @@ namespace SoundSpot
             contracts.Visible = true;
         }
 
+        private void LoadData()
+        {
+            try
+            {
+                string query = "SELECT s." + tableid + ", s.description, s.date, i.summary AS total, sp.name AS supplier, i.number AS invoicenumber, i.payment AS paid, i.dispatch AS dispatched, " +
+               "'Редактировать' AS Edit " +
+               "FROM contractssupply AS s " +
+               "JOIN supplyinvoices AS i ON i.contractsupplyid = s.contractsupplyid " +
+               "JOIN suppliers AS sp ON s.supplierid = sp.supplierid";
+
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                NpgsqlDataAdapter adapter = new NpgsqlDataAdapter(command);
+                dataAdapter = adapter;
+
+                dataSet = new DataSet();
+
+                dataAdapter.Fill(dataSet, "Result");
+
+                BindingSource bindingSource = new BindingSource();
+                bindingSource.DataSource = dataSet.Tables["Result"];
+                ClientsGridView.DataSource = bindingSource;
+                ClientsGridView.Sort(ClientsGridView.Columns[tableid], ListSortDirection.Ascending);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка LoadData!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void OpenCustomControl(int editrowId)
+        {
+            try
+            {
+                string query = "SELECT s." + tableid + ", s.description, s.date, i.summary AS total, sp.name AS supplier, i.number AS invoicenumber, i.payment AS paid, i.dispatch AS dispatched, " +
+                "'Редактировать' AS Edit " +
+                "FROM contractssupply AS s " +
+                "JOIN supplyinvoices AS i ON i.contractsupplyid = s.contractsupplyid " +
+                "JOIN suppliers AS sp ON s.supplierid = sp.supplierid " +
+                "WHERE  s." + tableid + " = @" + tableid;
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                command.Parameters.AddWithValue("@" + tableid, editrowId);
+
+                ClientsGridView.Columns[tableid].Visible = false;
+
+                NpgsqlDataAdapter adapter = new NpgsqlDataAdapter(command);
+                DataSet dataSet = new DataSet();
+                adapter.Fill(dataSet, table);
+
+                if (dataSet.Tables[table].Rows.Count > 0)
+                {
+                    // Создать и открыть форму EditDataBooks
+                    var editform = new CustomForms.EditSupplyContract();
+
+                    string dateString = dataSet.Tables[table].Rows[0]["date"].ToString();
+                    DateTime databaseDateTime = DateTime.Parse(dateString);
+                    DateTime databaseDateOnly = databaseDateTime.Date;
+
+                    LocalDate parsedDate = LocalDate.FromDateTime(databaseDateOnly);
+                    editform.Description = dataSet.Tables[table].Rows[0]["description"].ToString();
+                    editform.Date = parsedDate.ToDateTimeUnspecified();
+                    editform.Sum = decimal.Parse(dataSet.Tables[table].Rows[0]["total"].ToString());
+                    editform.Supplier = dataSet.Tables[table].Rows[0]["supplier"].ToString();
+                    editform.Invoiceid = dataSet.Tables[table].Rows[0]["invoicenumber"].ToString();
+                    editform.Payment = (bool)dataSet.Tables[table].Rows[0]["paid"];
+                    editform.Dispatch = (bool)dataSet.Tables[table].Rows[0]["dispatched"];
+                    DialogResult result = editform.ShowDialog();
+
+                    if (result == DialogResult.OK)
+                    {
+                        DateTime updatedDateTime = editform.Date;
+
+                        LocalDate updatedDate = LocalDate.FromDateTime(updatedDateTime);
+                        string updateddescripton = editform.Description;
+                        bool updatedpaid = editform.Payment;
+                        bool updateddispatched = editform.Dispatch;
+
+                        // Обновить базу данных с новыми значениями
+                        string updateQuery = "UPDATE contractssupply SET date = @date, description = @description WHERE " + tableid + " = @" + tableid;
+                        NpgsqlCommand updateCommand = new NpgsqlCommand(updateQuery, connection);
+                        updateCommand.Parameters.AddWithValue("@date", updatedDate.ToDateTimeUnspecified());
+                        updateCommand.Parameters.AddWithValue("@description", updateddescripton);
+                        updateCommand.Parameters.AddWithValue("@" + tableid, editrowId);
+                        updateCommand.ExecuteNonQuery();
+
+                        DataRow updatedRow = dataSet.Tables[table].Rows[0];
+                        updatedRow["date"] = updatedDate.ToDateTimeUnspecified();
+                        updatedRow["description"] = updateddescripton;
+
+                        string updateQueryinvoice = "UPDATE supplyinvoices SET payment = @payment, dispatch = @dispatch WHERE " + tableid + " = @" + tableid;
+                        NpgsqlCommand updateCommandinvoice = new NpgsqlCommand(updateQueryinvoice, connection);
+                        updateCommandinvoice.Parameters.AddWithValue("@payment", updatedpaid);
+                        updateCommandinvoice.Parameters.AddWithValue("@dispatch", updateddispatched);
+                        updateCommandinvoice.Parameters.AddWithValue("@" + tableid, editrowId);
+                        updateCommandinvoice.ExecuteNonQuery();
+
+                        int rowIndex = ClientsGridView.SelectedCells[0].RowIndex;
+                        DataGridViewRow dataGridViewRow = ClientsGridView.Rows[rowIndex];
+                        dataGridViewRow.Cells["date"].Value = updatedDate.ToDateTimeUnspecified();
+                        dataGridViewRow.Cells["description"].Value = updateddescripton;
+                        dataGridViewRow.Cells["paid"].Value = updatedpaid;
+                        dataGridViewRow.Cells["dispatched"].Value = updateddispatched;
+                        // Обновите остальные ячейки в соответствии с обновлениями
+
+                        // Очистите выделение в DataGridView
+                        ClientsGridView.ClearSelection();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Заказ с указанным названием не найдена.", "Ошибка OpenCustomControl!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка OpenCustomControl!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        public void RefreshDataGridView()
+        {
+            string query = "SELECT s." + tableid + ", s.description, s.date, i.summary AS total, sp.name AS supplier, i.number AS invoicenumber, i.payment AS paid, i.dispatch AS dispatched, " +
+               "'Редактировать' AS Edit " +
+               "FROM contractssupply AS s " +
+               "JOIN supplyinvoices AS i ON i.contractsupplyid = s.contractsupplyid " +
+               "JOIN suppliers AS sp ON s.supplierid = sp.supplierid";
+
+            NpgsqlDataAdapter adapter = new NpgsqlDataAdapter(query, connection);
+            DataSet dataSet = new DataSet();
+            adapter.Fill(dataSet, table);
+
+
+            ClientsGridView.DataSource = dataSet.Tables[table];
+            ClientsGridView.Columns[tableid].Visible = false;
+        }
+
         private void SupplyContracts_Load(object sender, EventArgs e)
         {
             string connectionString = "Server=localhost;Port=5432;Database=SoundSpot;UserId=SoundSpot;Password=Polli1Anna2";
@@ -47,281 +183,94 @@ namespace SoundSpot
 
             LoadData();
         }
-        private void LoadData()
+
+        public void GenerateWordDocument(DataGridView dataGridView)
         {
-            try
+            // Создание нового документа Word
+            XWPFDocument document = new XWPFDocument();
+
+            // Создание таблицы в документе
+            XWPFTable table = document.CreateTable(dataGridView.Rows.Count, dataGridView.Columns.Count - 1);
+
+            // Заполнение заголовков таблицы
+            XWPFTableRow headerRow = table.GetRow(0);
+            for (int i = 1; i < dataGridView.Columns.Count - 1; i++)
             {
-                dataAdapter = new NpgsqlDataAdapter("SELECT *, 'Delete' AS \"Command\" FROM " + table, connection);
-
-                builder = new NpgsqlCommandBuilder(dataAdapter);
-
-                dataAdapter.InsertCommand = builder.GetInsertCommand();
-                dataAdapter.UpdateCommand = builder.GetUpdateCommand();
-                dataAdapter.DeleteCommand = builder.GetDeleteCommand();
-
-                dataSet = new DataSet();
-
-                dataAdapter.Fill(dataSet, table);
-
-                ClientsGridView.DataSource = dataSet.Tables[table];
-
-                ClientsGridView.DataBindingComplete += ClientsGridView_DataBindingComplete;
+                string headerText = dataGridView.Columns[i].HeaderText;
+                headerRow.GetCell(i).SetText(headerText);
             }
-            catch (Exception ex)
+
+            // Заполнение таблицы данными из DataGridView
+            for (int i = 0; i < dataGridView.Rows.Count - 1; i++)
             {
-                MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void ClientsGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
-        {
-            for (int i = 0; i < ClientsGridView.Rows.Count; i++)
-            {
-                DataGridViewLinkCell linkCell = new DataGridViewLinkCell();
-
-                ClientsGridView[numcols, i] = linkCell;
-            }
-        }
-
-        private void ReloadData()
-        {
-            try
-            {
-                dataSet.Tables[table].Clear();
-
-                dataAdapter.Fill(dataSet, table);
-
-                ClientsGridView.DataSource = dataSet.Tables[table];
-
-                ClientsGridView.DataBindingComplete += ClientsGridView_DataBindingComplete;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        private int[] GetMaxLengths()
-        {
-            int[] maxLengths = new int[ClientsGridView.Columns.Count];
-
-            for (int i = 0; i < ClientsGridView.Columns.Count; i++)
-            {
-                int maxLength = ClientsGridView.Columns[i].HeaderText.Length;
-                foreach (DataGridViewRow row in ClientsGridView.Rows)
+                XWPFTableRow row = table.GetRow(i + 1);
+                for (int j = 1; j < dataGridView.Columns.Count - 1; j++)
                 {
-                    if (row.Cells[i].Value != null)
-                    {
-                        int cellLength = row.Cells[i].Value.ToString().Length;
-                        if (cellLength > maxLength)
-                        {
-                            maxLength = cellLength;
-                        }
-                    }
+                    string cellValue = dataGridView.Rows[i].Cells[j].Value?.ToString() ?? string.Empty;
+                    row.GetCell(j).SetText(cellValue);
                 }
-                maxLengths[i] = maxLength;
             }
 
-            return maxLengths;
-        }
-
-        private void SavetoFile(string filename)
-        {
-            FileStream fs = new FileStream(@"C:\AncientMechanic\SoundSpot\reports\" + filename, FileMode.Create);
-            StreamWriter streamWriter = new StreamWriter(fs);
-
-            try
+            // Отображение диалогового окна выбора пути сохранения файла
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Документ Word (*.docx)|*.docx";
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                int[] maxLengths = GetMaxLengths();
-
-                for (int j = 0; j < ClientsGridView.Rows.Count; j++)
+                // Сохранение документа в выбранный путь
+                using (FileStream fileStream = new FileStream(saveFileDialog.FileName, FileMode.Create, FileAccess.Write))
                 {
-                    for (int i = 0; i < ClientsGridView.Columns.Count - 1; i++)
-                    {
-                        string cellValue = (ClientsGridView[i, j].Value ?? "").ToString();
-
-                        string formattedCellValue = string.Format("{0,-" + maxLengths[i] + "}", cellValue);
-
-                        streamWriter.Write(formattedCellValue);
-                        if (i < ClientsGridView.Columns.Count - 1)
-                        {
-                            streamWriter.Write("    ");
-                        }
-                    }
-                    streamWriter.WriteLine();
+                    document.Write(fileStream);
                 }
-
-                streamWriter.Close();
-                fs.Close();
-
-                MessageBox.Show("Report saved!");
-            }
-            catch
-            {
-                MessageBox.Show("Cannot save report!");
             }
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            string s = Interaction.InputBox("Save as..", "Save", "SupContracts.txt");
-            SavetoFile(s);
+            GenerateWordDocument(ClientsGridView);
         }
-        private void ClientsGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+
+        private void OpenAddDataForm()
         {
-            try
-            {
-                if (newRowAdd == false)
-                {
-                    int rowIndex = ClientsGridView.SelectedCells[0].RowIndex;
-
-                    DataGridViewRow editingRow = ClientsGridView.Rows[rowIndex];
-                    DataGridViewLinkCell linkCell = new DataGridViewLinkCell();
-                    ClientsGridView[numcols, rowIndex] = linkCell;
-
-                    editingRow.Cells["Command"].Value = "Update";
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            var addDataForm = new CustomForms.AddSupplyContract();
+            addDataForm.DataAdded += AddDataForm_DataAdded;
+            addDataForm.ShowDialog();
         }
-
-        private void ClientsGridView_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        private void AddDataForm_DataAdded(object sender, EventArgs e)
         {
-            try
-            {
-                if (newRowAdd == false)
-                {
-                    newRowAdd = true;
-
-                    int lastRow = ClientsGridView.Rows.Count - 2;
-
-                    DataGridViewRow row = ClientsGridView.Rows[lastRow];
-                    DataGridViewLinkCell linkCell = new DataGridViewLinkCell();
-
-                    ClientsGridView[numcols, lastRow] = linkCell;
-
-                    row.Cells["Command"].Value = "Insert";
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            // Обновление данных в DataGridView
+            RefreshDataGridView();
         }
-
-
 
         private void ClientsGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
-
-                if (e.ColumnIndex == numcols && ClientsGridView.Rows[e.RowIndex].Cells[numcols].Value != null)
+                if (e.RowIndex >= 0 && e.ColumnIndex == ClientsGridView.Columns["Edit"].Index)
                 {
-                    string task = ClientsGridView.Rows[e.RowIndex].Cells[numcols].Value.ToString();
-                    if (task == "Delete")
-                    {
-                        if (ClientsGridView.Columns[e.ColumnIndex].Name == "Command" && e.RowIndex >= 0)
-                        {
-                            if (MessageBox.Show("You want to DELETE this row?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                            {
-                                int id = (int)ClientsGridView.Rows[e.RowIndex].Cells[tableID].Value;
-                                using (NpgsqlCommand cmd = new NpgsqlCommand("DELETE FROM " + table + " WHERE \"" + tableID + "\" = @" + tableID, connection))
-                                {
-                                    cmd.Parameters.AddWithValue("@" + tableID, id);
-                                    cmd.ExecuteNonQuery();
-                                }
-                                LoadData(); // Обновляем таблицу
+                    int convar = (int)ClientsGridView.Rows[e.RowIndex].Cells[tableid].Value;
+                    OpenCustomControl(convar);
 
-                            }
-
-                        }
-                    }
-                    else if (task == "Insert")
-                    {
-                        if (ClientsGridView.Columns[e.ColumnIndex].Name == "Command" && e.RowIndex >= 0)
-                        {
-                            if (MessageBox.Show("You want to INSERT a new row?", "Insert", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                            {
-                                int rowIndex = ClientsGridView.Rows.Count - 2;
-
-                                DataRow row = dataSet.Tables[table].NewRow();
-
-                                row["Date"] = ClientsGridView.Rows[rowIndex].Cells["Date"].Value;
-                                row["Description"] = ClientsGridView.Rows[rowIndex].Cells["Description"].Value;
-                                row["SupplierID"] = ClientsGridView.Rows[rowIndex].Cells["SupplierID"].Value;
-
-
-                                dataSet.Tables[table].Rows.Add(row);
-                                dataSet.Tables[table].Rows.RemoveAt(dataSet.Tables[table].Rows.Count - 2);
-                                ClientsGridView.Rows.RemoveAt(ClientsGridView.Rows.Count - 2);
-                                ClientsGridView.Rows[e.RowIndex].Cells[numcols].Value = "Delete";
-
-                                dataAdapter.Update(dataSet, table);
-                                newRowAdd = false;
-                            }
-                            else
-                            {
-                                newRowAdd = false;
-                            }
-                        }
-                    }
-                    else if (task == "Update")
-                    {
-                        if (ClientsGridView.Columns[e.ColumnIndex].Name == "Command" && e.RowIndex >= 0)
-                        {
-                            if (MessageBox.Show("You want to UPDATE this row?", "Update", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                            {
-                                int r = e.RowIndex;
-
-                                DataRow row = dataSet.Tables[table].Rows[r];
-
-                                row.BeginEdit();
-                                row["Date"] = ClientsGridView.Rows[r].Cells["Date"].Value;
-                                row["Description"] = ClientsGridView.Rows[r].Cells["Description"].Value;
-                                row["SupplierID"] = ClientsGridView.Rows[r].Cells["SupplierID"].Value;
-
-                                row.EndEdit();
-
-                                dataAdapter.Update(dataSet, table);
-
-                                ClientsGridView.Rows[e.RowIndex].Cells[numcols].Value = "Delete";
-                            }
-
-                        }
-
-                    }
-
-                    ReloadData();
                 }
-
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        private void Column_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
+                MessageBox.Show(ex.Message, "Ошибка CellContentClick!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            ReloadData();
+            OpenAddDataForm();
+            ClientsGridView.Sort(ClientsGridView.Columns[tableid], ListSortDirection.Ascending);
         }
+
 
         private void SupplyContracts_VisibleChanged(object sender, EventArgs e)
         {
             if (this.Visible)
             {
                 // The control is now visible, so refresh the DataGridView
-                //RefreshDataGridView();
+                RefreshDataGridView();
             }
         }
     }
