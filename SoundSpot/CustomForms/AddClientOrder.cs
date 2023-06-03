@@ -46,8 +46,9 @@ namespace SoundSpot.CustomForms
             try
             {
                 // Получить текущее значение из поля count в таблице storeroom
-                string selectQuery = "SELECT amount FROM storage";
+                string selectQuery = "SELECT amount FROM storage WHERE instrumentid = @instrumentid";
                 NpgsqlCommand selectCommand = new NpgsqlCommand(selectQuery, connection);
+                selectCommand.Parameters.AddWithValue("@instrumentid", instrumentid);
                 decimal currentCount = (int)selectCommand.ExecuteScalar();
 
                 // Проверить, есть ли достаточное количество для вычитания

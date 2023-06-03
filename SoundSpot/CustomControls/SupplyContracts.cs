@@ -58,6 +58,13 @@ namespace SoundSpot
 
                 dataAdapter.Fill(dataSet, "Result");
 
+                foreach (DataRow row in dataSet.Tables["Result"].Rows)
+                {
+                    int contractId = Convert.ToInt32(row["сontractsupplyid"]);
+                    decimal totalSum = CalculateTotalSum(contractId);
+                    row["total"] = totalSum;
+                }
+
                 BindingSource bindingSource = new BindingSource();
                 bindingSource.DataSource = dataSet.Tables["Result"];
                 ClientsGridView.DataSource = bindingSource;
@@ -69,7 +76,24 @@ namespace SoundSpot
                 MessageBox.Show(ex.Message, "Ошибка LoadData!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        private decimal CalculateTotalSum(int contractId)
+        {
+            string sumQuery = "SELECT SUM(summary) FROM batches WHERE contractsupplyid = @contractsupplyid";
+            using (NpgsqlCommand sumCommand = new NpgsqlCommand(sumQuery, connection))
+            {
+                sumCommand.Parameters.AddWithValue("@contractsupplyid", contractId);
+                object result = sumCommand.ExecuteScalar();
 
+                if (result != DBNull.Value && result != null)
+                {
+                    return Convert.ToDecimal(result);
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
         private void OpenCustomControl(int editrowId)
         {
             try
@@ -170,6 +194,12 @@ namespace SoundSpot
             DataSet dataSet = new DataSet();
             adapter.Fill(dataSet, table);
 
+            foreach (DataRow row in dataSet.Tables["contractssupply"].Rows)
+            {
+                int contractId = Convert.ToInt32(row["contractsupplyid"]);
+                decimal totalSum = CalculateTotalSum(contractId);
+                row["total"] = totalSum;
+            }
 
             ClientsGridView.DataSource = dataSet.Tables[table];
             ClientsGridView.Columns[tableid].Visible = false;

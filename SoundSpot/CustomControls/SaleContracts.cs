@@ -58,6 +58,13 @@ namespace SoundSpot
 
                 dataAdapter.Fill(dataSet, "Result");
 
+                foreach (DataRow row in dataSet.Tables["Result"].Rows)
+                {
+                    int contractId = Convert.ToInt32(row["contractsaleid"]);
+                    decimal totalSum = CalculateTotalSum(contractId);
+                    row["total"] = totalSum;
+                }
+
                 BindingSource bindingSource = new BindingSource();
                 bindingSource.DataSource = dataSet.Tables["Result"];
                 ClientsGridView.DataSource = bindingSource;
@@ -67,6 +74,24 @@ namespace SoundSpot
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Ошибка LoadData!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private decimal CalculateTotalSum(int contractId)
+        {
+            string sumQuery = "SELECT SUM(summary) FROM orders WHERE contractsaleid = @contractsaleid";
+            using (NpgsqlCommand sumCommand = new NpgsqlCommand(sumQuery, connection))
+            {
+                sumCommand.Parameters.AddWithValue("@contractsaleid", contractId);
+                object result = sumCommand.ExecuteScalar();
+
+                if (result != DBNull.Value && result != null)
+                {
+                    return Convert.ToDecimal(result);
+                }
+                else
+                {
+                    return 0;
+                }
             }
         }
 
@@ -173,6 +198,12 @@ namespace SoundSpot
             DataSet dataSet = new DataSet();
             adapter.Fill(dataSet, table);
 
+            foreach (DataRow row in dataSet.Tables["contractssale"].Rows)
+            {
+                int contractId = Convert.ToInt32(row["contractsaleid"]);
+                decimal totalSum = CalculateTotalSum(contractId);
+                row["total"] = totalSum;
+            }
 
             ClientsGridView.DataSource = dataSet.Tables[table];
             ClientsGridView.Columns[tableid].Visible = false;
