@@ -62,6 +62,14 @@ namespace SoundSpot
                 ClientsGridView.DataSource = bindingSource;
                 ClientsGridView.Sort(ClientsGridView.Columns["orderid"], ListSortDirection.Ascending);
 
+                ClientsGridView.Columns["orderid"].HeaderText = "Номер заказа";
+                ClientsGridView.Columns["date"].HeaderText = "Дата";
+                ClientsGridView.Columns["amount"].HeaderText = "Кол-во товара";
+                ClientsGridView.Columns["summary"].HeaderText = "Сумма, руб.";
+                ClientsGridView.Columns["salecontract"].HeaderText = "Договор";
+                ClientsGridView.Columns["instrument"].HeaderText = "Товар";
+                ClientsGridView.Columns["Edit"].HeaderText = "Редактировать";
+
             }
             catch (Exception ex)
             {
@@ -185,7 +193,7 @@ namespace SoundSpot
 
             // Заполнение заголовков таблицы
             XWPFTableRow headerRow = table.GetRow(0);
-            for (int i = 1; i < dataGridView.Columns.Count - 1; i++)
+            for (int i = 0; i < dataGridView.Columns.Count - 1; i++)
             {
                 string headerText = dataGridView.Columns[i].HeaderText;
                 headerRow.GetCell(i).SetText(headerText);
@@ -195,7 +203,7 @@ namespace SoundSpot
             for (int i = 0; i < dataGridView.Rows.Count - 1; i++)
             {
                 XWPFTableRow row = table.GetRow(i + 1);
-                for (int j = 1; j < dataGridView.Columns.Count - 1; j++)
+                for (int j = 0; j < dataGridView.Columns.Count - 1; j++)
                 {
                     string cellValue = dataGridView.Rows[i].Cells[j].Value?.ToString() ?? string.Empty;
                     row.GetCell(j).SetText(cellValue);

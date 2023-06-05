@@ -61,6 +61,10 @@ namespace SoundSpot
                 ClientsGridView.Columns[tableid].Visible = false;
                 ClientsGridView.Sort(ClientsGridView.Columns[tableid], ListSortDirection.Ascending);
 
+                ClientsGridView.Columns["name"].HeaderText = "Поставщик";
+                ClientsGridView.Columns["address"].HeaderText = "Адрес";
+                ClientsGridView.Columns["Edit"].HeaderText = "Редактировать";
+
             }
             catch (Exception ex)
             {

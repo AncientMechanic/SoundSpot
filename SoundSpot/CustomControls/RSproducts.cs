@@ -44,11 +44,11 @@ namespace SoundSpot
             {
                 string selectedOption = comboBox1.SelectedItem.ToString();
                 DataTable dataTable = new DataTable();
-                dataTable.Columns.Add("Amount");
-                dataTable.Columns.Add("Instrument");
-                dataTable.Columns.Add("Manufacturer");
-                dataTable.Columns.Add("Supplier");
-                dataTable.Columns.Add("SaleContract");
+                dataTable.Columns.Add("Кол-во товара");
+                dataTable.Columns.Add("Товар");
+                dataTable.Columns.Add("Производитель");
+                dataTable.Columns.Add("Поставщик");
+                dataTable.Columns.Add("Договор");
 
                 string ordersTable = (selectedOption == "Sold Products") ? "orders" : "batches";
                 string instrumentsTable = "instruments";
@@ -196,7 +196,7 @@ namespace SoundSpot
             XWPFDocument document = new XWPFDocument();
 
             // Создание таблицы в документе
-            XWPFTable table = document.CreateTable(dataGridView.Rows.Count, dataGridView.Columns.Count);
+            XWPFTable table = document.CreateTable(dataGridView.Rows.Count + 1, dataGridView.Columns.Count);
 
             // Заполнение заголовков таблицы
             XWPFTableRow headerRow = table.GetRow(0);

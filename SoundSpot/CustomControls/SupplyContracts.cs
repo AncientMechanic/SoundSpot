@@ -60,7 +60,7 @@ namespace SoundSpot
 
                 foreach (DataRow row in dataSet.Tables["Result"].Rows)
                 {
-                    int contractId = Convert.ToInt32(row["сontractsupplyid"]);
+                    int contractId = Convert.ToInt32(row["contractsupplyid"]);
                     decimal totalSum = CalculateTotalSum(contractId);
                     row["total"] = totalSum;
                 }
@@ -70,6 +70,15 @@ namespace SoundSpot
                 ClientsGridView.DataSource = bindingSource;
                 ClientsGridView.Sort(ClientsGridView.Columns[tableid], ListSortDirection.Ascending);
 
+                ClientsGridView.Columns[tableid].HeaderText = "Номер договора";
+                ClientsGridView.Columns["description"].HeaderText = "Договор";
+                ClientsGridView.Columns["date"].HeaderText = "Дата";
+                ClientsGridView.Columns["total"].HeaderText = "Сумма, руб.";
+                ClientsGridView.Columns["supplier"].HeaderText = "Поставщик";
+                ClientsGridView.Columns["invoicenumber"].HeaderText = "Номер счета";
+                ClientsGridView.Columns["paid"].HeaderText = "Оплачено";
+                ClientsGridView.Columns["dispatched"].HeaderText = "Отгружено";
+                ClientsGridView.Columns["Edit"].HeaderText = "Редактировать";
             }
             catch (Exception ex)
             {
@@ -137,7 +146,6 @@ namespace SoundSpot
                         DateTime updatedDateTime = editform.Date;
 
                         LocalDate updatedDate = LocalDate.FromDateTime(updatedDateTime);
-                        string updateddescripton = editform.Description;
                         bool updatedpaid = editform.Payment;
                         bool updateddispatched = editform.Dispatch;
 
@@ -145,13 +153,11 @@ namespace SoundSpot
                         string updateQuery = "UPDATE contractssupply SET date = @date, description = @description WHERE " + tableid + " = @" + tableid;
                         NpgsqlCommand updateCommand = new NpgsqlCommand(updateQuery, connection);
                         updateCommand.Parameters.AddWithValue("@date", updatedDate.ToDateTimeUnspecified());
-                        updateCommand.Parameters.AddWithValue("@description", updateddescripton);
                         updateCommand.Parameters.AddWithValue("@" + tableid, editrowId);
                         updateCommand.ExecuteNonQuery();
 
                         DataRow updatedRow = dataSet.Tables[table].Rows[0];
                         updatedRow["date"] = updatedDate.ToDateTimeUnspecified();
-                        updatedRow["description"] = updateddescripton;
 
                         string updateQueryinvoice = "UPDATE supplyinvoices SET payment = @payment, dispatch = @dispatch WHERE " + tableid + " = @" + tableid;
                         NpgsqlCommand updateCommandinvoice = new NpgsqlCommand(updateQueryinvoice, connection);
@@ -163,7 +169,6 @@ namespace SoundSpot
                         int rowIndex = ClientsGridView.SelectedCells[0].RowIndex;
                         DataGridViewRow dataGridViewRow = ClientsGridView.Rows[rowIndex];
                         dataGridViewRow.Cells["date"].Value = updatedDate.ToDateTimeUnspecified();
-                        dataGridViewRow.Cells["description"].Value = updateddescripton;
                         dataGridViewRow.Cells["paid"].Value = updatedpaid;
                         dataGridViewRow.Cells["dispatched"].Value = updateddispatched;
                         // Обновите остальные ячейки в соответствии с обновлениями

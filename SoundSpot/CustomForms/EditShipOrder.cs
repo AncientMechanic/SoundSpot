@@ -73,9 +73,15 @@ namespace SoundSpot.CustomForms
             decimal price = Convert.ToDecimal(priceCommand.ExecuteScalar());
             total = amount * price;
 
-            string selectQuery = "SELECT summary FROM batches WHERE instrumentid = @instrumentid";
+            int editSetId = int.Parse(textBox5.Text);
+            string querySet = "SELECT batchid FROM batches WHERE batchid = @batchid";
+            NpgsqlCommand commandSet = new NpgsqlCommand(querySet, connection);
+            commandSet.Parameters.AddWithValue("@batchid", editSetId);
+            int setId = Convert.ToInt32(commandSet.ExecuteScalar());
+
+            string selectQuery = "SELECT summary FROM batches WHERE batchid = @batchid";
             NpgsqlCommand selectCommand = new NpgsqlCommand(selectQuery, connection);
-            selectCommand.Parameters.AddWithValue("@instrumentid", instrumentId);
+            selectCommand.Parameters.AddWithValue("@batchid", setId);
             decimal currentSum = (decimal)selectCommand.ExecuteScalar();
 
             decimal newSum = total - currentSum;

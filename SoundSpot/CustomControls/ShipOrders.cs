@@ -64,6 +64,13 @@ namespace SoundSpot
                 ClientsGridView.DataSource = bindingSource;
                 ClientsGridView.Sort(ClientsGridView.Columns[tableid], ListSortDirection.Ascending);
 
+                ClientsGridView.Columns[tableid].HeaderText = "Номер заказа";
+                ClientsGridView.Columns["amount"].HeaderText = "Кол-во товара";
+                ClientsGridView.Columns["summary"].HeaderText = "Сумма, руб.";
+                ClientsGridView.Columns["supplycontract"].HeaderText = "Договор";
+                ClientsGridView.Columns["instrument"].HeaderText = "Товар";
+                ClientsGridView.Columns["Edit"].HeaderText = "Редактировать";
+
             }
             catch (Exception ex)
             {
@@ -83,7 +90,6 @@ namespace SoundSpot
                 "WHERE  b." + tableid + " = @" + tableid;
                 NpgsqlCommand command = new NpgsqlCommand(query, connection);
                 command.Parameters.AddWithValue("@" + tableid, editrowId);
-
 
                 NpgsqlDataAdapter adapter = new NpgsqlDataAdapter(command);
                 DataSet dataSet = new DataSet();
@@ -173,7 +179,7 @@ namespace SoundSpot
 
             // Заполнение заголовков таблицы
             XWPFTableRow headerRow = table.GetRow(0);
-            for (int i = 1; i < dataGridView.Columns.Count - 1; i++)
+            for (int i = 0; i < dataGridView.Columns.Count - 1; i++)
             {
                 string headerText = dataGridView.Columns[i].HeaderText;
                 headerRow.GetCell(i).SetText(headerText);
@@ -183,7 +189,7 @@ namespace SoundSpot
             for (int i = 0; i < dataGridView.Rows.Count - 1; i++)
             {
                 XWPFTableRow row = table.GetRow(i + 1);
-                for (int j = 1; j < dataGridView.Columns.Count - 1; j++)
+                for (int j = 0; j < dataGridView.Columns.Count - 1; j++)
                 {
                     string cellValue = dataGridView.Rows[i].Cells[j].Value?.ToString() ?? string.Empty;
                     row.GetCell(j).SetText(cellValue);
