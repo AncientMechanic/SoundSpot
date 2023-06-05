@@ -48,15 +48,15 @@ namespace SoundSpot
                "FROM contractssale AS s " +
                "JOIN saleinvoices AS i ON i.contractsaleid = s.contractsaleid " +
                "JOIN clients AS c ON s.clientid = c.clientid " +
-               "JOIN sellers AS l ON s.sellerid = l.sellerid";
+               "JOIN sellers AS l ON s.sellerid = l.sellerid " +
+               "WHERE i.payment = @payment";
 
                 NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                command.Parameters.AddWithValue("@payment", true); // Filter for "payment" = true
+
                 NpgsqlDataAdapter adapter = new NpgsqlDataAdapter(command);
-                dataAdapter = adapter;
-
-                dataSet = new DataSet();
-
-                dataAdapter.Fill(dataSet, "Result");
+                DataSet dataSet = new DataSet();
+                adapter.Fill(dataSet, "Result");
 
                 foreach (DataRow row in dataSet.Tables["Result"].Rows)
                 {
@@ -114,7 +114,7 @@ namespace SoundSpot
                "FROM contractssale AS s " +
                "JOIN saleinvoices AS i ON s.contractsaleid = i.contractsaleid " +
                "JOIN clients AS c ON s.clientid = c.clientid " +
-               "JOIN sellers AS l ON s.sellerid = l.sellerid "+
+               "JOIN sellers AS l ON s.sellerid = l.sellerid " +
                 "WHERE  s." + tableid + " = @" + tableid;
                 NpgsqlCommand command = new NpgsqlCommand(query, connection);
                 command.Parameters.AddWithValue("@" + tableid, editrowId);
@@ -129,7 +129,7 @@ namespace SoundSpot
                 {
                     // Создать и открыть форму EditDataBooks
                     var editform = new CustomForms.EditSaleContract();
-                    
+
                     string dateString = dataSet.Tables[table].Rows[0]["date"].ToString();
                     DateTime databaseDateTime = DateTime.Parse(dateString);
                     DateTime databaseDateOnly = databaseDateTime.Date;
@@ -154,10 +154,10 @@ namespace SoundSpot
                         bool updateddispatched = editform.Dispatch;
 
                         // Обновить базу данных с новыми значениями
-                        string updateQuery = "UPDATE contractssale SET date = @date, description = @description WHERE "+ tableid +" = @"+tableid;
+                        string updateQuery = "UPDATE contractssale SET date = @date WHERE " + tableid + " = @" + tableid;
                         NpgsqlCommand updateCommand = new NpgsqlCommand(updateQuery, connection);
                         updateCommand.Parameters.AddWithValue("@date", updatedDate.ToDateTimeUnspecified());
-                        updateCommand.Parameters.AddWithValue("@"+tableid, editrowId);
+                        updateCommand.Parameters.AddWithValue("@" + tableid, editrowId);
                         updateCommand.ExecuteNonQuery();
 
                         DataRow updatedRow = dataSet.Tables[table].Rows[0];
@@ -310,6 +310,47 @@ namespace SoundSpot
             {
                 // The control is now visible, so refresh the DataGridView
                 RefreshDataGridView();
+            }
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string selectedItem = comboBox1.SelectedItem.ToString();
+
+            if (selectedItem == "Все")
+            {
+                // Show all contracts without any payment filter
+                RefreshDataGridView();
+            }
+            else
+            {
+                bool paymentFilter = selectedItem == "Оплачено"; // Check if "Оплачено" is selected
+
+                // Refresh the DataGridView with the filtered data
+                string query = "SELECT s." + tableid + ", s.description, s.date, i.summary AS total, c.firstname || ' ' || c.lastname AS client, l.firstname || ' ' || l.lastname AS seller, i.number AS invoicenumber, i.payment AS paid, i.dispatch AS dispatched, " +
+                   "'Редактировать' AS Edit " +
+                   "FROM contractssale AS s " +
+                   "JOIN saleinvoices AS i ON i.contractsaleid = s.contractsaleid " +
+                   "JOIN clients AS c ON s.clientid = c.clientid " +
+                   "JOIN sellers AS l ON s.sellerid = l.sellerid " +
+                   "WHERE i.payment = @payment";
+
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                command.Parameters.AddWithValue("@payment", paymentFilter); // Filter for the selected payment value
+
+                NpgsqlDataAdapter adapter = new NpgsqlDataAdapter(command);
+                DataSet dataSet = new DataSet();
+                adapter.Fill(dataSet, table);
+
+                foreach (DataRow row in dataSet.Tables[table].Rows)
+                {
+                    int contractId = Convert.ToInt32(row["contractsaleid"]);
+                    decimal totalSum = CalculateTotalSum(contractId);
+                    row["total"] = totalSum;
+                }
+
+                ClientsGridView.DataSource = dataSet.Tables[table];
+                ClientsGridView.Columns[tableid].Visible = false;
             }
         }
     }

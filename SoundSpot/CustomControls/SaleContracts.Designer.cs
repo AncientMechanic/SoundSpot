@@ -33,6 +33,7 @@
             button1 = new Button();
             label3 = new Label();
             button3 = new Button();
+            comboBox1 = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)ClientsGridView).BeginInit();
             SuspendLayout();
             // 
@@ -107,11 +108,23 @@
             button3.UseVisualStyleBackColor = false;
             button3.Click += button3_Click;
             // 
+            // comboBox1
+            // 
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Items.AddRange(new object[] { "Оплачено", "Не оплачено", "Все" });
+            comboBox1.Location = new Point(654, 409);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new Size(121, 23);
+            comboBox1.TabIndex = 13;
+            comboBox1.Text = "Все";
+            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
+            // 
             // SaleContracts
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.NavajoWhite;
+            Controls.Add(comboBox1);
             Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(ClientsGridView);
@@ -133,5 +146,6 @@
         private Button button1;
         private Label label3;
         private Button button3;
+        private ComboBox comboBox1;
     }
 }

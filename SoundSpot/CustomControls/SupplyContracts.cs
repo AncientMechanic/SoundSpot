@@ -45,18 +45,18 @@ namespace SoundSpot
             try
             {
                 string query = "SELECT s." + tableid + ", s.description, s.date, i.summary AS total, sp.name AS supplier, i.number AS invoicenumber, i.payment AS paid, i.dispatch AS dispatched, " +
-               "'Редактировать' AS Edit " +
-               "FROM contractssupply AS s " +
-               "JOIN supplyinvoices AS i ON i.contractsupplyid = s.contractsupplyid " +
-               "JOIN suppliers AS sp ON s.supplierid = sp.supplierid";
+                   "'Редактировать' AS Edit " +
+                   "FROM contractssupply AS s " +
+                   "JOIN supplyinvoices AS i ON i.contractsupplyid = s.contractsupplyid " +
+                   "JOIN suppliers AS sp ON s.supplierid = sp.supplierid " +
+                   "WHERE i.payment = @payment";
 
                 NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                command.Parameters.AddWithValue("@payment", true); // Filter for "payment" = true
+
                 NpgsqlDataAdapter adapter = new NpgsqlDataAdapter(command);
-                dataAdapter = adapter;
-
-                dataSet = new DataSet();
-
-                dataAdapter.Fill(dataSet, "Result");
+                DataSet dataSet = new DataSet();
+                adapter.Fill(dataSet, "Result");
 
                 foreach (DataRow row in dataSet.Tables["Result"].Rows)
                 {
@@ -79,12 +79,14 @@ namespace SoundSpot
                 ClientsGridView.Columns["paid"].HeaderText = "Оплачено";
                 ClientsGridView.Columns["dispatched"].HeaderText = "Отгружено";
                 ClientsGridView.Columns["Edit"].HeaderText = "Редактировать";
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Ошибка LoadData!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private decimal CalculateTotalSum(int contractId)
         {
             string sumQuery = "SELECT SUM(summary) FROM batches WHERE contractsupplyid = @contractsupplyid";
@@ -150,7 +152,7 @@ namespace SoundSpot
                         bool updateddispatched = editform.Dispatch;
 
                         // Обновить базу данных с новыми значениями
-                        string updateQuery = "UPDATE contractssupply SET date = @date, description = @description WHERE " + tableid + " = @" + tableid;
+                        string updateQuery = "UPDATE contractssupply SET date = @date WHERE " + tableid + " = @" + tableid;
                         NpgsqlCommand updateCommand = new NpgsqlCommand(updateQuery, connection);
                         updateCommand.Parameters.AddWithValue("@date", updatedDate.ToDateTimeUnspecified());
                         updateCommand.Parameters.AddWithValue("@" + tableid, editrowId);
@@ -306,6 +308,46 @@ namespace SoundSpot
             {
                 // The control is now visible, so refresh the DataGridView
                 RefreshDataGridView();
+            }
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string selectedItem = comboBox1.SelectedItem.ToString();
+
+            if (selectedItem == "Все")
+            {
+                // Show all contracts without any payment filter
+                RefreshDataGridView();
+            }
+            else
+            {
+                bool paymentFilter = selectedItem == "Оплачено"; // Check if "Оплачено" is selected
+
+                // Refresh the DataGridView with the filtered data
+                string query = "SELECT s." + tableid + ", s.description, s.date, i.summary AS total, sp.name AS supplier, i.number AS invoicenumber, i.payment AS paid, i.dispatch AS dispatched, " +
+                   "'Редактировать' AS Edit " +
+                   "FROM contractssupply AS s " +
+                   "JOIN supplyinvoices AS i ON i.contractsupplyid = s.contractsupplyid " +
+                   "JOIN suppliers AS sp ON s.supplierid = sp.supplierid " +
+                   "WHERE i.payment = @payment";
+
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                command.Parameters.AddWithValue("@payment", paymentFilter); // Filter for the selected payment value
+
+                NpgsqlDataAdapter adapter = new NpgsqlDataAdapter(command);
+                DataSet dataSet = new DataSet();
+                adapter.Fill(dataSet, table);
+
+                foreach (DataRow row in dataSet.Tables[table].Rows)
+                {
+                    int contractId = Convert.ToInt32(row["contractsupplyid"]);
+                    decimal totalSum = CalculateTotalSum(contractId);
+                    row["total"] = totalSum;
+                }
+
+                ClientsGridView.DataSource = dataSet.Tables[table];
+                ClientsGridView.Columns[tableid].Visible = false;
             }
         }
     }
