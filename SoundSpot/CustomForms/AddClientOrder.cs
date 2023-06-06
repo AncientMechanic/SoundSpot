@@ -41,31 +41,46 @@ namespace SoundSpot.CustomForms
             int instrumentId = Convert.ToInt32(command.ExecuteScalar());
             return instrumentId;
         }
-        private void SubtractFromStoreroom(int subtractCount, int instrumentid)
+        private void SubtractFromStoreroom(int subtractCount, int instrumentid, int salesConId)
         {
             try
             {
-                // Получить текущее значение из поля count в таблице storeroom
-                string selectQuery = "SELECT amount FROM storage WHERE instrumentid = @instrumentid";
-                NpgsqlCommand selectCommand = new NpgsqlCommand(selectQuery, connection);
-                selectCommand.Parameters.AddWithValue("@instrumentid", instrumentid);
-                decimal currentCount = (int)selectCommand.ExecuteScalar();
+                string checkQuery = "SELECT payment, dispatch FROM saleinvoices WHERE contractsaleid = @contractsaleid";
+                NpgsqlCommand checkCommand = new NpgsqlCommand(checkQuery, connection);
+                checkCommand.Parameters.AddWithValue("@contractsaleid", salesConId);
+                NpgsqlDataReader reader = checkCommand.ExecuteReader();
 
-                // Проверить, есть ли достаточное количество для вычитания
-                if (currentCount >= subtractCount)
+                bool paid = false;
+                //bool dispatched = false;
+                if (reader.Read())
                 {
-                    string updateQuery = "UPDATE storage SET amount = amount - @subtractCount WHERE  instrumentid = @instrumentid";
-                    NpgsqlCommand updateCommand = new NpgsqlCommand(updateQuery, connection);
-                    updateCommand.Parameters.AddWithValue("@subtractCount", subtractCount);
-                    updateCommand.Parameters.AddWithValue("@instrumentid", instrumentid);
-                    updateCommand.ExecuteNonQuery();
-                    isEnough = true;
+                    paid = reader.GetBoolean(0);
+                    //dispatched = reader.GetBoolean(1);
                 }
-                else
+                reader.Close();
+                if (paid)
                 {
-                    isEnough = false;
-                }
+                    // Получить текущее значение из поля count в таблице storeroom
+                    string selectQuery = "SELECT amount FROM storage WHERE instrumentid = @instrumentid";
+                    NpgsqlCommand selectCommand = new NpgsqlCommand(selectQuery, connection);
+                    selectCommand.Parameters.AddWithValue("@instrumentid", instrumentid);
+                    decimal currentCount = (int)selectCommand.ExecuteScalar();
 
+                    // Проверить, есть ли достаточное количество для вычитания
+                    if (currentCount >= subtractCount)
+                    {
+                        string updateQuery = "UPDATE storage SET amount = amount - @subtractCount WHERE  instrumentid = @instrumentid";
+                        NpgsqlCommand updateCommand = new NpgsqlCommand(updateQuery, connection);
+                        updateCommand.Parameters.AddWithValue("@subtractCount", subtractCount);
+                        updateCommand.Parameters.AddWithValue("@instrumentid", instrumentid);
+                        updateCommand.ExecuteNonQuery();
+                        isEnough = true;
+                    }
+                    else
+                    {
+                        isEnough = false;
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -89,9 +104,23 @@ namespace SoundSpot.CustomForms
                 int instrumentId = GetInstrumentIdByName(instrument);
 
                 int subtractCount = int.Parse(textBox1.Text);
-                SubtractFromStoreroom(subtractCount, instrumentId);
+                SubtractFromStoreroom(subtractCount, instrumentId, salesConId);
 
-                if (isEnough == true)
+                string checkQuery = "SELECT payment, dispatch FROM saleinvoices WHERE contractsaleid = @contractsaleid";
+                NpgsqlCommand checkCommand = new NpgsqlCommand(checkQuery, connection);
+                checkCommand.Parameters.AddWithValue("@contractsaleid", salesConId);
+                NpgsqlDataReader reader = checkCommand.ExecuteReader();
+
+                bool paid = false;
+                //bool dispatched = false;
+                if (reader.Read())
+                {
+                    paid = reader.GetBoolean(0);
+                    //dispatched = reader.GetBoolean(1);
+                }
+                reader.Close();
+
+                if (isEnough == true && paid)
                 {
                     // Вставить новую запись в таблицу
                     string insertQuery = "INSERT INTO orders (date, amount, summary, contractsaleid, instrumentid) VALUES (@date, @amount, @summary, @contractsaleid, @instrumentid)";
@@ -104,11 +133,23 @@ namespace SoundSpot.CustomForms
                     insertCommand.ExecuteNonQuery();
                     MessageBox.Show("Заказ успешно оформлен!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                else if (isEnough == false)
+                else if (isEnough == false && paid)
                 {
                     MessageBox.Show("Недостаточное количество товара на складе!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                DataAdded?.Invoke(this, EventArgs.Empty);
+                else if (isEnough == false && paid == false)
+                {
+                    string insertQuery = "INSERT INTO orders (date, amount, summary, contractsaleid, instrumentid) VALUES (@date, @amount, @summary, @contractsaleid, @instrumentid)";
+                    NpgsqlCommand insertCommand = new NpgsqlCommand(insertQuery, connection);
+                    insertCommand.Parameters.AddWithValue("@date", localTime.ToDateTimeUnspecified());
+                    insertCommand.Parameters.AddWithValue("@amount", amount);
+                    insertCommand.Parameters.AddWithValue("@summary", total);
+                    insertCommand.Parameters.AddWithValue("@contractsaleid", salesConId);
+                    insertCommand.Parameters.AddWithValue("@instrumentid", instrumentId);
+                    insertCommand.ExecuteNonQuery();
+                    MessageBox.Show("Заказ успешно оформлен!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                    DataAdded?.Invoke(this, EventArgs.Empty);
                 Close();
             }
             catch (Exception ex)

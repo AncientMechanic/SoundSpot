@@ -40,22 +40,38 @@ namespace SoundSpot.CustomForms
             int instrumentId = Convert.ToInt32(command.ExecuteScalar());
             return instrumentId;
         }
-        private void AddToStoreroom(int addCount, int instrumentid)
+        private void AddToStoreroom(int addCount, int instrumentid, int supCon)
         {
             try
             {
-                // Получить текущее значение из поля count в таблице storeroom
-                string selectQuery = "SELECT amount FROM storage";
-                NpgsqlCommand selectCommand = new NpgsqlCommand(selectQuery, connection);
-                decimal currentCount = (int)selectCommand.ExecuteScalar();
+                string checkQuery = "SELECT payment, dispatch FROM supplyinvoices WHERE contractsupplyid = @contractsupplyid";
+                NpgsqlCommand checkCommand = new NpgsqlCommand(checkQuery, connection);
+                checkCommand.Parameters.AddWithValue("@contractsupplyid", supCon);
+                NpgsqlDataReader reader = checkCommand.ExecuteReader();
 
-                // Проверить, есть ли достаточное количество для вычитания
+                bool paid = false;
+                bool dispatched = false;
+                if (reader.Read())
+                {
+                    paid = reader.GetBoolean(0);
+                    dispatched = reader.GetBoolean(1);
+                }
+                reader.Close();
+                if (paid && dispatched)
+                {
+                    // Получить текущее значение из поля count в таблице storeroom
+                    string selectQuery = "SELECT amount FROM storage";
+                    NpgsqlCommand selectCommand = new NpgsqlCommand(selectQuery, connection);
+                    decimal currentCount = (int)selectCommand.ExecuteScalar();
 
-                string updateQuery = "UPDATE storage SET amount = amount + @addCount WHERE  instrumentid = @instrumentid";
-                NpgsqlCommand updateCommand = new NpgsqlCommand(updateQuery, connection);
-                updateCommand.Parameters.AddWithValue("@addCount", addCount);
-                updateCommand.Parameters.AddWithValue("@instrumentid", instrumentid);
-                updateCommand.ExecuteNonQuery();
+                    // Проверить, есть ли достаточное количество для вычитания
+
+                    string updateQuery = "UPDATE storage SET amount = amount + @addCount WHERE  instrumentid = @instrumentid";
+                    NpgsqlCommand updateCommand = new NpgsqlCommand(updateQuery, connection);
+                    updateCommand.Parameters.AddWithValue("@addCount", addCount);
+                    updateCommand.Parameters.AddWithValue("@instrumentid", instrumentid);
+                    updateCommand.ExecuteNonQuery();
+                }
 
             }
             catch (Exception ex)
@@ -84,7 +100,7 @@ namespace SoundSpot.CustomForms
                 decimal total = amount * price;
 
                 int addCount = int.Parse(textBox1.Text);
-                AddToStoreroom(addCount, instrumentId);
+                AddToStoreroom(addCount, instrumentId, supplyConId);
 
                 // Insert a new record into the orders table
                 string insertQuery = "INSERT INTO batches (amount, summary, contractsupplyid, instrumentid) VALUES (@amount, @summary, @contractsupplyid, @instrumentid)";

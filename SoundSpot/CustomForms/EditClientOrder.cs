@@ -62,7 +62,14 @@ namespace SoundSpot.CustomForms
             get { return textBox4.Text; }
             set { textBox4.Text = value; }
         }
-
+        private int GetSupConIdByName(string saleCon)
+        {
+            string query = "SELECT contractsaleid FROM contractssale WHERE description = @description";
+            NpgsqlCommand command = new NpgsqlCommand(query, connection);
+            command.Parameters.AddWithValue("@description", saleCon);
+            int supConId = Convert.ToInt32(command.ExecuteScalar());
+            return supConId;
+        }
         private void btnOK_Click(object sender, EventArgs e)
         {
             string connectionString = "Server=localhost;Port=5432;Database=SoundSpot;UserId=SoundSpot;Password=Polli1Anna2";
@@ -86,43 +93,64 @@ namespace SoundSpot.CustomForms
             decimal countStorage = (int)countCommand.ExecuteScalar();
 
             decimal newAmount = decimal.Parse(textBox1.Text);
+            int supConId = GetSupConIdByName(Contract);
 
-            if (add == false)
+            string checkQuery = "SELECT payment, dispatch FROM saleinvoices WHERE contractsaleid = @contractsaleid";
+            NpgsqlCommand checkCommand = new NpgsqlCommand(checkQuery, connection);
+            checkCommand.Parameters.AddWithValue("@contractsaleid", supConId);
+            NpgsqlDataReader reader = checkCommand.ExecuteReader();
+
+            bool paid = false;
+            //bool dispatched = false;
+            if (reader.Read())
             {
-                if (newAmount >= currentCount && newAmount - currentCount <= countStorage)
-                {
-                    string updateQuery = "UPDATE storage SET amount = amount - (@newAmount - @currentAmount) WHERE  instrumentid = @instrumentid";
-                    NpgsqlCommand updateCommand = new NpgsqlCommand(updateQuery, connection);
-                    updateCommand.Parameters.AddWithValue("@newAmount", newAmount);
-                    updateCommand.Parameters.AddWithValue("@currentAmount", currentCount);
-                    updateCommand.Parameters.AddWithValue("@instrumentid", instrumentId);
-                    updateCommand.ExecuteNonQuery();
-                    add = true;
-
-                }
-                else if (newAmount < currentCount)
-                {
-                    string updateQuery = "UPDATE storage SET amount = amount + (@currentAmount - @newAmount) WHERE  instrumentid = @instrumentid";
-                    NpgsqlCommand updateCommand = new NpgsqlCommand(updateQuery, connection);
-                    updateCommand.Parameters.AddWithValue("@newAmount", newAmount);
-                    updateCommand.Parameters.AddWithValue("@currentAmount", currentCount);
-                    updateCommand.Parameters.AddWithValue("@instrumentid", instrumentId);
-                    updateCommand.ExecuteNonQuery();
-                    add = true;
-
-                }
-                else if (newAmount > countStorage)
-                {
-                    MessageBox.Show("Недостаточное количество книг на складе!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
+                paid = reader.GetBoolean(0);
+                //dispatched = reader.GetBoolean(1);
             }
-            DialogResult = DialogResult.OK;
-            Close();
-        }
+            reader.Close();
 
-        private void EditClientOrder_Load(object sender, EventArgs e)
+            if (paid)
+            {
+                if (add == false)
+                {
+                    if (newAmount >= currentCount && newAmount - currentCount <= countStorage)
+                    {
+                        string updateQuery = "UPDATE storage SET amount = amount - (@newAmount - @currentAmount) WHERE  instrumentid = @instrumentid";
+                        NpgsqlCommand updateCommand = new NpgsqlCommand(updateQuery, connection);
+                        updateCommand.Parameters.AddWithValue("@newAmount", newAmount);
+                        updateCommand.Parameters.AddWithValue("@currentAmount", currentCount);
+                        updateCommand.Parameters.AddWithValue("@instrumentid", instrumentId);
+                        updateCommand.ExecuteNonQuery();
+                        add = true;
+
+                    }
+                    else if (newAmount < currentCount)
+                    {
+                        string updateQuery = "UPDATE storage SET amount = amount + (@currentAmount - @newAmount) WHERE  instrumentid = @instrumentid";
+                        NpgsqlCommand updateCommand = new NpgsqlCommand(updateQuery, connection);
+                        updateCommand.Parameters.AddWithValue("@newAmount", newAmount);
+                        updateCommand.Parameters.AddWithValue("@currentAmount", currentCount);
+                        updateCommand.Parameters.AddWithValue("@instrumentid", instrumentId);
+                        updateCommand.ExecuteNonQuery();
+                        add = true;
+
+                    }
+                    else if (newAmount > countStorage)
+                    {
+                        MessageBox.Show("Недостаточное количество книг на складе!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+            else
+            {
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+        }
+            private void EditClientOrder_Load(object sender, EventArgs e)
         {
 
         }

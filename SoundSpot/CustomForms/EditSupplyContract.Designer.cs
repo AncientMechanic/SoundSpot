@@ -210,6 +210,7 @@
             Controls.Add(btnOK);
             Name = "EditSupplyContract";
             Text = "EditSupplyContract";
+            Load += EditSupplyContract_Load;
             ResumeLayout(false);
             PerformLayout();
         }
